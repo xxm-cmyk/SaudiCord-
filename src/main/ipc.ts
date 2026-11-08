@@ -61,6 +61,19 @@ handle(IpcEvents.ENABLE_AUTOSTART, autoStart.enable);
 handle(IpcEvents.DISABLE_AUTOSTART, autoStart.disable);
 
 handle(IpcEvents.SET_SETTINGS, (_, settings: typeof Settings.store, path?: string) => {
+    if (!settings || typeof settings !== "object" || Array.isArray(settings)) {
+        throw new TypeError("Invalid settings payload");
+    }
+
+    if (
+        path !== undefined &&
+        (typeof path !== "string" ||
+            path.length > 256 ||
+            path.split(".").some(part => !part || ["__proto__", "prototype", "constructor"].includes(part)))
+    ) {
+        throw new TypeError("Invalid settings notification path");
+    }
+
     Settings.setData(settings, path);
 });
 
@@ -78,7 +91,19 @@ handle(IpcEvents.SHOW_CUSTOM_VENCORD_DIR, async () => {
 });
 
 function getWindow(e: IpcMainInvokeEvent, key?: string) {
-    return key ? PopoutWindows.get(key)! : (BrowserWindow.fromWebContents(e.sender) ?? mainWin);
+    const senderWindow = BrowserWindow.fromWebContents(e.sender);
+    if (!senderWindow || senderWindow.isDestroyed()) {
+        throw new Error("IPC sender does not belong to an active application window");
+    }
+
+    if (!key) return senderWindow;
+
+    const popout = PopoutWindows.get(key);
+    if (!popout || popout.isDestroyed() || popout.webContents !== e.sender) {
+        throw new Error("IPC sender is not the requested popout window");
+    }
+
+    return popout;
 }
 
 handle(IpcEvents.FOCUS, () => {
