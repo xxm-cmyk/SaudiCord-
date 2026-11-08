@@ -35,13 +35,13 @@ import { isLinux, isWindows } from "renderer/utils";
 
 import { SimpleErrorBoundary } from "./SimpleErrorBoundary";
 
-const Streamالدقةs = ["480", "720", "1080", "1440", "2160", "0"] as const;
-const StreamالدقةLabels = ["480", "720", "1080", "1440", "2160", "المصدر"];
+const StreamResolutions = ["480", "720", "1080", "1440", "2160", "0"] as const;
+const StreamResolutionLabels = ["480", "720", "1080", "1440", "2160", "المصدر"];
 const StreamFps = ["15", "30", "60"] as const;
 
 const cl = classNameFactory("vcd-screen-picker-");
 
-export type Streamالدقة = (typeof Streamالدقةs)[number];
+export type StreamResolution = (typeof StreamResolutions)[number];
 export type StreamFps = (typeof StreamFps)[number];
 
 type SpecialSource = "None" | "Entire System";
@@ -373,8 +373,8 @@ function StreamSettingsUi({
                             الدقة
                         </Heading>
                         <OptionRadio
-                            options={Streamالدقةs}
-                            labels={StreamالدقةLabels}
+                            options={StreamResolutions}
+                            labels={StreamResolutionLabels}
                             settings={qualitySettings}
                             settingsKey="resolution"
                             onChange={value => (qualitySettings.resolution = value)}
