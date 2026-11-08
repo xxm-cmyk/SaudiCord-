@@ -22,7 +22,7 @@ import { setAsDefaultProtocolClient } from "./utils/setAsDefaultProtocolClient";
 import { showWindow } from "./utils/showWindow";
 import { isDeckGameMode } from "./utils/steamOS";
 
-console.log("Vesktop v" + app.getVersion());
+console.log("SaudiCord v" + app.getVersion());
 
 // Make the Vencord files use our DATA_DIR
 process.env.VENCORD_USER_DATA_DIR = DATA_DIR;
@@ -107,7 +107,7 @@ function init() {
     });
 
     app.whenReady().then(async () => {
-        if (process.platform === "win32") app.setAppUserModelId("dev.vencord.vesktop");
+        if (process.platform === "win32") app.setAppUserModelId("com.saudicord.desktop");
 
         registerScreenShareHandler();
         registerMediaPermissionsHandler();
