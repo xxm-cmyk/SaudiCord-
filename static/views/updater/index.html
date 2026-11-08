@@ -1,8 +1,9 @@
 <!doctype html>
+<html lang="ar" dir="rtl">
 <meta charset="utf-8" />
 
 <head>
-    <title>SaudiCord Updater</title>
+    <title>تحديث سعودي كورد</title>
     <meta
         http-equiv="Content-Security-Policy"
         content="
@@ -18,36 +19,35 @@
 
 <body>
     <header>
-        <h1>An update is available!</h1>
+        <h1>يتوفر تحديث جديد!</h1>
     </header>
 
     <main>
         <p id="versions">
-            <span class="label">Current version:</span> <span id="current-version" class="value"></span>
-            <span class="label">New version:</span> <span id="new-version" class="value"></span>
+            <span class="label">الإصدار الحالي:</span> <span id="current-version" class="value"></span>
+            <span class="label">الإصدار الجديد:</span> <span id="new-version" class="value"></span>
         </p>
-        <h2>Release Notes</h2>
+        <h2>ملاحظات الإصدار</h2>
 
         <div id="release-notes"></div>
     </main>
 
     <footer>
         <section id="buttons">
-            <button id="update-button" class="green">Install update & restart</button>
-            <button id="later-button" class="grey">Remind me later</button>
-            <button id="ignore-button" class="grey">Ignore this update</button>
+            <button id="update-button" class="green">تثبيت التحديث وإعادة التشغيل</button>
+            <button id="later-button" class="grey">ذكّرني لاحقاً</button>
+            <button id="ignore-button" class="grey">تجاهل هذا التحديث</button>
         </section>
     </footer>
 
     <dialog id="update-dialog" closedby="none">
-        <h2>Downloading Update</h2>
+        <h2>جارٍ تنزيل التحديث</h2>
         <p>
-            Please wait while the update is being downloaded. Once the update finished downloading, it will
-            automatically install and SaudiCord will restart.
+            انتظر حتى يكتمل تنزيل التحديث. بعد اكتماله، سيُثبّت تلقائياً ويُعاد تشغيل سعودي كورد.
         </p>
 
         <p id="linux-note" class="hidden">
-            You will likely be prompted to enter your password. Do so to finish the update.
+            قد يُطلب منك إدخال كلمة مرور الجهاز لإكمال التحديث.
         </p>
 
         <progress id="download-progress" value="0" max="100"></progress>
@@ -56,8 +56,8 @@
     </dialog>
 
     <dialog id="installing-dialog" closedby="none">
-        <h2>Installing Update</h2>
-        <p>Please wait while the update is being installed. SaudiCord will restart shortly.</p>
+        <h2>جارٍ تثبيت التحديث</h2>
+        <p>انتظر حتى يكتمل تثبيت التحديث. سيُعاد تشغيل سعودي كورد بعد قليل.</p>
 
         <div class="spinner-wrapper">
             <div class="spinner"></div>
@@ -66,3 +66,4 @@
 </body>
 
 <script type="module" src="./script.js"></script>
+</html>
