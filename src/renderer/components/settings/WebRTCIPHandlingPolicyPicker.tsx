@@ -18,8 +18,7 @@ export const WebRTCIPHandlingPolicyPicker: SettingsComponent = ({ settings }) =>
                     سياسة التعامل مع عنوان IP في WebRTC
                 </Heading>
                 <Paragraph className={Margins.bottom8}>
-                    قد يساعد تغيير هذا الخيار في حل مشكلات الاتصال الصوتي في بعض الشبكات، خصوصاً عند استخدام VPN مثل
-                    Tailscale.
+                    قد يساعد تغيير هذا الخيار في حل مشكلات الاتصال الصوتي في بعض الشبكات، خصوصاً عند استخدام VPN مثل Tailscale.
                 </Paragraph>
                 <Select
                     placeholder="افتراضي"
