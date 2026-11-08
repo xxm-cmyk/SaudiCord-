@@ -112,6 +112,7 @@ function isValidAudioNodeList(value: unknown): value is Node[] {
 
             const entries = Object.entries(node);
             return (
+                entries.length > 0 &&
                 entries.length <= 64 &&
                 entries.every(
                     ([key, fieldValue]) =>
