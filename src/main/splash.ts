@@ -20,7 +20,10 @@ export function createSplashWindow(startMinimized = false) {
         ...SplashProps,
         show: !startMinimized,
         webPreferences: {
-            preload: join(__dirname, "splashPreload.js")
+            preload: join(__dirname, "splashPreload.js"),
+            nodeIntegration: false,
+            contextIsolation: true,
+            sandbox: true
         }
     });
 
