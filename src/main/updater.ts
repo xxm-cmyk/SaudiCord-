@@ -55,7 +55,10 @@ function openUpdater(update: UpdateInfo) {
         title: "Vesktop Updater",
         autoHideMenuBar: true,
         webPreferences: {
-            preload: join(__dirname, "updaterPreload.js")
+            preload: join(__dirname, "updaterPreload.js"),
+            nodeIntegration: false,
+            contextIsolation: true,
+            sandbox: true
         },
         minHeight: 400,
         minWidth: 750
