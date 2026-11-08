@@ -39,3 +39,12 @@
     display: grid;
     gap: 0.5em;
 }
+
+.vcd-settings-category,
+.vcd-settings-category-title,
+.vcd-settings-category-content,
+.vcd-settings-switch,
+.vcd-settings-updater-card {
+    direction: rtl;
+    text-align: right;
+}
