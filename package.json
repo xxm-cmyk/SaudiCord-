@@ -122,12 +122,13 @@
             "desktop": {
                 "entry": {
                     "Name": "SaudiCord",
-                    "GenericName": "Internet Messenger",
+                    "GenericName": "عميل Discord للمراسلة",
                     "Type": "Application",
                     "Categories": "Network;InstantMessaging;Chat;",
                     "Keywords": "saudicord;discord;electron;chat;",
                     "MimeType": "x-scheme-handler/discord",
-                    "StartupWMClass": "saudicord"
+                    "StartupWMClass": "saudicord",
+                    "Comment": "تطبيق Discord لسطح المكتب بواجهة عربية"
                 }
             }
         },
@@ -143,11 +144,14 @@
             "category": "public.app-category.social-networking",
             "darkModeSupport": true,
             "extendInfo": {
-                "NSMicrophoneUsageDescription": "This app needs access to the microphone",
-                "NSCameraUsageDescription": "This app needs access to the camera",
+                "NSMicrophoneUsageDescription": "يحتاج سعودي كورد إلى الوصول إلى الميكروفون للمحادثات الصوتية ومشاركة الشاشة.",
+                "NSCameraUsageDescription": "يحتاج سعودي كورد إلى الوصول إلى الكاميرا لمكالمات الفيديو.",
                 "com.apple.security.device.audio-input": true,
                 "com.apple.security.device.camera": true,
-                "CFBundleIconName": "Icon"
+                "CFBundleIconName": "Icon",
+                "CFBundleLocalizations": [
+                    "ar"
+                ]
             },
             "requirements": "build/signing-requirements.txt",
             "notarize": true
