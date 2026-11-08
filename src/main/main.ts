@@ -33,7 +33,7 @@ export let enableHardwareAcceleration = true;
 
 function init() {
     // Prefer Arabic browser localization; Discord account language settings may still take precedence.
-    app.commandLine.appendSwitch("lang", "ar-SA");
+    app.commandLine.appendSwitch("lang", "ar");
     setAsDefaultProtocolClient("discord");
 
     const { disableSmoothScroll, hardwareAcceleration, hardwareVideoAcceleration, hardwareVideoEncoding } =
