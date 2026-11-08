@@ -32,7 +32,7 @@ export interface IpcResponse {
  * You must add a handler for the message in the renderer process.
  */
 export function sendRendererCommand<T = any>(message: string, data?: any) {
-    if (mainWin.isDestroyed()) {
+    if (!mainWin || mainWin.isDestroyed()) {
         console.warn("Main window is destroyed, cannot send IPC command:", message);
         return Promise.reject(new Error("Main window is destroyed"));
     }
@@ -48,9 +48,17 @@ export function sendRendererCommand<T = any>(message: string, data?: any) {
     return promise;
 }
 
-ipcMain.on(IpcEvents.IPC_COMMAND, (_event, { nonce, ok, data }: IpcResponse) => {
+ipcMain.on(IpcEvents.IPC_COMMAND, (event, rawResponse: IpcResponse) => {
+    // Only accept replies from the exact renderer that received the command.
+    if (!mainWin || mainWin.isDestroyed() || event.sender !== mainWin.webContents) return;
+    if (!rawResponse || typeof rawResponse !== "object") return;
+
+    const { nonce, ok, data } = rawResponse;
+    if (typeof nonce !== "string" || typeof ok !== "boolean") return;
+
     const resolver = resolvers.get(nonce);
-    if (!resolver) throw new Error(`Unknown message: ${nonce}`);
+    // Stale, duplicate, or forged nonces are ignored rather than throwing in main.
+    if (!resolver) return;
 
     if (ok) {
         resolver.resolve(data);
