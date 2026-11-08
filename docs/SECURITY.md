@@ -43,7 +43,7 @@ Please do not publish exploitable details in a public issue. Contact the project
 
 The following controls are present in the current code. Their presence is not a substitute for independent security testing:
 
-- Main, updater, splash, first-launch, about, and Discord popout windows explicitly disable Node integration and enable context isolation and Chromium sandboxing.
+- Main, updater, splash, first-launch, about, and Discord popout windows explicitly disable Node integration and enable context isolation and Chromium sandboxing. Packaged builds also enable Electron's embedded ASAR integrity validation fuse; this setting still needs a successful packaged-build test.
 - IPC sender validation rejects non-top-level frames and unapproved origins. Updater actions are additionally bound to the updater window's exact `WebContents`.
 - Renderer-to-main command replies are accepted only from the main window's main frame.
 - Vencord desktop assets are downloaded from the official Vencord GitHub release. The loader requires the four expected files, checks each GitHub-provided SHA-256 digest, replaces the active files only after all downloads pass verification, and records a local integrity manifest that is checked again on startup. Custom Vencord directories remain an explicit user trust decision.
