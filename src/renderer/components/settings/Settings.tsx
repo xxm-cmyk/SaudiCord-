@@ -195,7 +195,7 @@ function SettingsSections() {
 export default ErrorBoundary.wrap(
     function SettingsUI() {
         return (
-            <section>
+            <section lang="ar" dir="rtl">
                 <OutdatedVesktopWarning />
                 <SettingsSections />
             </section>
