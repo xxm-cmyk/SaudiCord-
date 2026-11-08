@@ -1,64 +1,79 @@
-# Vesktop
+# SaudiCord
 
-Vesktop is a custom Discord desktop app
+**SaudiCord** is an Arabic-focused desktop client project built on top of [Vesktop](https://github.com/Vencord/Vesktop), with the goal of making the Discord desktop experience more natural for Arabic users.
 
-**Main features**:
+> SaudiCord is an independent community project. It is not affiliated with, endorsed by, or sponsored by Discord Inc., Vencord, or the Vesktop contributors.
 
-- Vencord preinstalled
-- Much more lightweight and faster than the official Discord app
-- Linux Screenshare with sound & wayland
-- Much better privacy, since Discord has no access to your system
+## Project goals
 
-**Not yet supported**:
+- Arabic interface with correct right-to-left (RTL) layout.
+- Preserve the familiar Discord desktop experience instead of replacing it with an unrelated design.
+- Focus on Windows 10 and Windows 11 first.
+- Improve plugin discovery and management, with clear permission and source information before a plugin is enabled.
+- Apply security-conscious defaults and verify update integrity.
+- Keep Discord as the service for accounts, servers, messages, and voice. SaudiCord does not create a separate chat network or ask users to create SaudiCord accounts.
 
-- Global Keybinds
-- see the [Roadmap](https://github.com/Vencord/Vesktop/issues/324)
+## Project status
 
-![](https://github.com/Vencord/Vesktop/assets/45497981/8608a899-96a9-4027-9725-2cb02ba189fd)
-![](https://github.com/Vencord/Vesktop/assets/45497981/8701e5de-52c4-4346-a990-719cb971642e)
+SaudiCord is in early development. This repository currently contains the upstream Vesktop codebase as its foundation. SaudiCord-specific interface, localization, plugin-management, and security changes are planned work; do not assume they are already implemented or that a production-ready build is available.
 
-## Installing
+## Upstream foundation and acknowledgements
 
-Visit https://vesktop.dev/install
+SaudiCord is based on **Vesktop**, developed by the Vencord contributors.
 
-## Building from Source
+- Upstream project: https://github.com/Vencord/Vesktop
+- Upstream organization: https://github.com/Vencord
+- Vesktop website: https://vesktop.dev
+- License: GNU General Public License v3.0 (GPL-3.0)
 
-You need to have the following dependencies installed:
+The original license and upstream notices are retained in this repository. See [LICENSE](./LICENSE) and [CREDITS.md](./CREDITS.md). Third-party dependencies and assets may have their own licenses.
+
+## Building from source
+
+### Requirements
 
 - [Git](https://git-scm.com/downloads)
 - [Node.js](https://nodejs.org/en/download)
-- pnpm: `npm install --global pnpm`
+- [pnpm](https://pnpm.io/)
 
-Packaging will create builds in the dist/ folder
+Install pnpm if needed:
 
 ```sh
-git clone https://github.com/Vencord/Vesktop
-cd Vesktop
+npm install --global pnpm
+```
 
-# Install Dependencies
-pnpm i
+Clone this repository and install dependencies:
 
-# Either run it without packaging
+```sh
+git clone https://github.com/xxm-cmyk/SaudiCord-.git
+cd SaudiCord-
+pnpm install
+```
+
+Run the development app:
+
+```sh
 pnpm start
+```
 
-# Or package (will build packages for your OS)
+Package for the current operating system:
+
+```sh
 pnpm package
+```
 
-# Or only build the Linux Pacman package
-pnpm package --linux pacman
+Or package to a directory:
 
-# Or package to a directory only
+```sh
 pnpm package:dir
 ```
 
-## Building LibVesktop from Source
+Build output is placed in the `dist/` directory. Build requirements and available targets may vary by operating system; Windows is the initial SaudiCord target, and Windows packaging still needs to be validated as SaudiCord development progresses.
 
-This is a small C++ helper library Vesktop uses on Linux to emit D-Bus events. By default, prebuilt binaries for x64 and arm64 are used.
+## Security
 
-If you want to build it from source:
+Read [docs/SECURITY.md](./docs/SECURITY.md) for the project's security principles. These are design requirements, not a claim that the current code has already implemented or passed every security control.
 
-1. Install build dependencies:
-    - Debian/Ubuntu: `apt install build-essential python3 curl pkg-config libglib2.0-dev`
-    - Fedora: `dnf install @c-development @development-tools python3 curl pkgconf-pkg-config glib2-devel`
-2. Run `pnpm buildLibVesktop`
-3. From now on, building Vesktop will use your own build
+## Contributions
+
+Before proposing a change, please identify whether it modifies upstream Vesktop behavior or adds SaudiCord-specific functionality. Preserve relevant copyright notices and license terms when modifying or redistributing upstream code.
