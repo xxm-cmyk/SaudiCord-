@@ -193,10 +193,10 @@ function AudioSettingsModal({
         <Modal
             {...modalProps}
             size="lg"
-            title="إعدادات الصوت"
+            title={<span dir="rtl">إعدادات الصوت</span>}
             actions={[{ text: "رجوع", variant: "secondary", onClick: close }]}
         >
-            <div className={cl("venmic-settings")}>
+            <div className={cl("venmic-settings")} dir="rtl" lang="ar">
                 <FormSwitch
                     title="كتم الصوت عند البدء"
                     description="معالجة ارتفاع مفاجئ في مستوى الصوت عند بدء المشاركة."
@@ -353,7 +353,7 @@ function StreamSettingsUi({
     };
 
     return (
-        <div>
+        <div dir="rtl" lang="ar">
             <Heading tag="h4" className={Margins.bottom8}>
                 ما تشاركه الآن
             </Heading>
@@ -585,7 +585,7 @@ function AudioSourcePickerLinux({
     if (!hasPipewirePulse && !ignorePulseWarning) {
         return (
             <Paragraph>
-                Could not find pipewire-pulse. راجع{" "}
+                تعذر العثور على pipewire-pulse. راجع{" "}
                 <a
                     href="https://gist.github.com/the-spyke/2de98b22ff4f978ebf0650c90e82027e#install"
                     target="_blank"
@@ -713,7 +713,7 @@ function ModalComponent({
         <Modal
             {...modalProps}
             size="lg"
-            title="مشاركة الشاشة"
+            title={<span dir="rtl">مشاركة الشاشة</span>}
             actions={[
                 {
                     text: showGoBack ? "رجوع" : "إلغاء",
@@ -727,16 +727,18 @@ function ModalComponent({
                 }
             ]}
         >
-            {!selected ? (
-                <ScreenPicker screens={screens} chooseScreen={setSelected} />
-            ) : (
-                <StreamSettingsUi
-                    source={screens.find(s => s.id === selected)!}
-                    settings={settings}
-                    setSettings={setSettings}
-                    skipPicker={skipPicker}
-                />
-            )}
+            <div dir="rtl" lang="ar">
+                {!selected ? (
+                    <ScreenPicker screens={screens} chooseScreen={setSelected} />
+                ) : (
+                    <StreamSettingsUi
+                        source={screens.find(s => s.id === selected)!}
+                        settings={settings}
+                        setSettings={setSettings}
+                        skipPicker={skipPicker}
+                    />
+                )}
+            </div>
         </Modal>
     );
 }
