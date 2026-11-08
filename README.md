@@ -68,7 +68,7 @@ Or package to a directory:
 pnpm package:dir
 ```
 
-Build output is placed in the `dist/` directory. Build requirements and available targets may vary by operating system; Windows is the initial SaudiCord target, and Windows packaging still needs to be validated as SaudiCord development progresses.
+Build output is placed in the `dist/` directory. Build requirements and available targets may vary by operating system; Windows is the initial SaudiCord target. Local builds are for development only. The automated release workflow intentionally blocks publishing until the required GPL license text is present and Windows code-signing secrets are configured.
 
 ## Security
 
