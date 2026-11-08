@@ -15,8 +15,8 @@ export const AutoStartToggle: SettingsComponent = ({ settings }) => {
     return (
         <>
             <VesktopSettingsSwitch
-                title="Start With System"
-                description="Automatically start Vesktop on computer start-up"
+                title="التشغيل مع بدء النظام"
+                description="تشغيل سعودي كورد تلقائياً عند بدء تشغيل الكمبيوتر"
                 value={autoStartEnabled}
                 onChange={async v => {
                     await VesktopNative.autostart[v ? "enable" : "disable"]();
@@ -25,8 +25,8 @@ export const AutoStartToggle: SettingsComponent = ({ settings }) => {
             />
 
             <VesktopSettingsSwitch
-                title="Auto Start Minimized"
-                description={"Start Vesktop minimized when starting with system"}
+                title="بدء التشغيل في وضع مصغّر"
+                description={"تشغيل سعودي كورد مصغّراً عند بدء النظام"}
                 value={settings.autoStartMinimized}
                 onChange={v => (settings.autoStartMinimized = v)}
                 disabled={!autoStartEnabled}
