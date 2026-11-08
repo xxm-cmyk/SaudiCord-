@@ -34,127 +34,127 @@ export const cl = classNameFactory("vcd-settings-");
 export type SettingsComponent = ComponentType<{ settings: typeof Settings.store }>;
 
 const SettingsOptions: Record<string, Array<BooleanSetting | SettingsComponent>> = {
-    "Discord Branch": [DiscordBranchPicker],
-    "System Startup & Performance": [
+    "فرع Discord": [DiscordBranchPicker],
+    "بدء التشغيل والأداء": [
         AutoStartToggle,
         {
             key: "hardwareAcceleration",
-            title: "Hardware Acceleration",
-            description: "Enable hardware acceleration"
+            title: "تسريع الأجهزة",
+            description: "تفعيل تسريع الأجهزة"
         },
         {
             key: "hardwareVideoAcceleration",
-            title: "Video Hardware Decoding",
+            title: "فك ترميز الفيديو عبر بطاقة الرسوميات",
             description:
-                "Use your GPU to decode video, like streams you watch. This can improve performance, but may cause graphical glitches.",
+                "استخدام بطاقة الرسوميات لفك ترميز الفيديو، وقد يحسن الأداء لكنه قد يسبب مشكلات رسومية.",
             disabled: () => !Settings.store.hardwareAcceleration
         },
         {
             key: "hardwareVideoEncoding",
-            title: "Video Hardware Encoding",
+            title: "ترميز الفيديو عبر بطاقة الرسوميات",
             description:
-                "Use your GPU to encode your screenshare. This lowers CPU usage, but on some drivers (for example AMD with Mesa 24.3 or newer) viewers will be stuck loading your stream forever.",
+                "استخدام بطاقة الرسوميات لترميز مشاركة الشاشة وتقليل استهلاك المعالج، وقد لا يعمل مع بعض التعريفات.",
             disabled: () => !Settings.store.hardwareAcceleration
         }
     ],
-    "User Interface": [
+    "واجهة المستخدم": [
         {
             key: "nativeTitleBar",
-            title: "Native Titlebar",
-            description: "Enable the system titlebar in addition to Discord's custom one. Requires a full restart."
+            title: "شريط عنوان النظام",
+            description: "إظهار شريط عنوان النظام بدلاً من شريط Discord المخصص. يتطلب إعادة تشغيل التطبيق."
         },
         {
             key: "staticTitle",
-            title: "Static Title",
-            description: 'Makes the window title "Vesktop" instead of changing to the current page'
+            title: "عنوان ثابت",
+            description: "إظهار اسم سعودي كورد في عنوان النافذة بدلاً من اسم الصفحة الحالية."
         },
         {
             key: "enableMenu",
-            title: "Enable Menu Bar",
-            description: "Enables the application menu bar. Press ALT to toggle visibility.",
+            title: "إظهار شريط القوائم",
+            description: "إظهار قائمة التطبيق. اضغط ALT لإظهارها أو إخفائها.",
             disabled: () => !Settings.store.nativeTitleBar
         },
         {
             key: "enableShadow",
-            title: "Enable Window Shadow",
-            description: "Enables the window shadow. Requires a full restart.",
+            title: "ظل النافذة",
+            description: "إظهار ظل حول النافذة. يتطلب إعادة التشغيل.",
             disabled: () => Settings.store.nativeTitleBar
         },
         {
             key: "enableRoundedCorners",
-            title: "Enable Rounded Corners",
-            description: "Enables rounded corners. Requires a full restart.",
+            title: "زوايا مستديرة",
+            description: "تدوير زوايا النافذة. يتطلب إعادة التشغيل.",
             disabled: () => Settings.store.nativeTitleBar
         },
         {
             key: "enableSplashScreen",
-            title: "Enable Splash Screen",
+            title: "شاشة البداية",
             description:
-                "Shows a small splash screen while Vesktop is loading. Disabling this option will show the main window earlier while it's still loading."
+                "إظهار شاشة البداية أثناء تشغيل سعودي كورد. عند تعطيلها ستظهر النافذة الرئيسية قبل اكتمال التحميل."
         },
         {
             key: "splashTheming",
-            title: "Splash theming",
-            description: "Adapt the splash window colors to your custom theme"
+            title: "تناسق ألوان شاشة البداية",
+            description: "تكييف ألوان شاشة البداية مع السمة المستخدمة."
         },
         WindowsTransparencyControls,
         UserAssetsButton
     ],
-    Behaviour: [
+    السلوك: [
         {
             key: "tray",
-            title: "Tray Icon",
-            description: "Add a tray icon for Vesktop",
+            title: "أيقونة شريط النظام",
+            description: "إضافة أيقونة سعودي كورد إلى شريط النظام.",
             invisible: () => isMac
         },
         {
             key: "minimizeToTray",
-            title: "Minimize to tray",
-            description: "Hitting X will make Vesktop minimize to the tray instead of closing",
+            title: "التصغير إلى شريط النظام",
+            description: "تصغير سعودي كورد إلى شريط النظام عند الضغط على زر الإغلاق.",
             invisible: () => isMac,
             disabled: () => !Settings.store.tray
         },
         {
             key: "clickTrayToShowHide",
-            title: "Hide/Show on tray click",
-            description: "Left clicking tray icon will toggle the vesktop window visibility."
+            title: "إظهار أو إخفاء التطبيق بالنقر",
+            description: "النقر على أيقونة شريط النظام يبدّل ظهور نافذة التطبيق."
         },
         {
             key: "disableMinSize",
-            title: "Disable minimum window size",
-            description: "Allows you to make the window as small as your heart desires"
+            title: "إلغاء الحد الأدنى لحجم النافذة",
+            description: "السماح بتصغير النافذة إلى أي حجم."
         },
         {
             key: "disableSmoothScroll",
-            title: "Disable smooth scrolling",
-            description: "Disables smooth scrolling"
+            title: "تعطيل التمرير السلس",
+            description: "إيقاف تأثير التمرير السلس."
         }
     ],
-    Notifications: [
+    الإشعارات: [
         NotificationBadgeToggle,
         {
             key: "enableTaskbarFlashing",
-            title: "Enable Taskbar Flashing",
-            description: "Flashes the app in your taskbar when you have new notifications."
+            title: "وميض شريط المهام",
+            description: "وميض أيقونة التطبيق في شريط المهام عند وصول إشعارات جديدة."
         }
     ],
-    Miscellaneous: [
+    متفرقات: [
         {
             key: "arRPC",
-            title: "Rich Presence",
-            description: "Lets games and apps connect to Vesktop for Rich Presence and game detection"
+            title: "الحالة والنشاط",
+            description: "السماح للألعاب والتطبيقات بعرض نشاطها واكتشاف الألعاب عبر سعودي كورد."
         },
 
         {
             key: "openLinksWithElectron",
-            title: "Open Links in app (experimental)",
-            description: "Opens links in a new Vesktop window instead of your web browser"
+            title: "فتح الروابط داخل التطبيق (تجريبي)",
+            description: "فتح الروابط في نافذة جديدة بدلاً من المتصفح الخارجي."
         },
 
         WebRTCIPHandlingPolicyPicker
     ],
 
-    "Developer Options": [DeveloperOptionsButton]
+    "خيارات المطور": [DeveloperOptionsButton]
 };
 
 function SettingsSections() {
@@ -203,6 +203,6 @@ export default ErrorBoundary.wrap(
     },
     {
         message:
-            "Failed to render the Vesktop Settings tab. If this issue persists, try to right click the Vesktop tray icon, then click 'Repair Vencord'. And make sure your Vesktop is up to date."
+            "تعذر عرض إعدادات سعودي كورد. إذا استمرت المشكلة، استخدم خيار إصلاح Vencord من قائمة التطبيق وتأكد من تحديثه."
     }
 );
