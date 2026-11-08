@@ -1,12 +1,12 @@
 {
-    "name": "vesktop",
+    "name": "saudicord",
     "version": "1.6.9",
     "private": true,
-    "description": "Vesktop is a custom Discord desktop app",
+    "description": "An Arabic-focused desktop client for Discord, based on Vesktop.",
     "keywords": [],
-    "homepage": "https://vencord.dev/",
+    "homepage": "https://github.com/xxm-cmyk/SaudiCord-",
     "license": "GPL-3.0-or-later",
-    "author": "Vendicated <vendicated@riseup.net>",
+    "author": "SaudiCord contributors",
     "main": "dist/js/main.js",
     "scripts": {
         "build": "tsx scripts/build/build.mts",
@@ -57,16 +57,16 @@
         "pnpm": ">=11"
     },
     "build": {
-        "appId": "dev.vencord.vesktop",
-        "productName": "Vesktop",
-        "executableName": "vesktop",
+        "appId": "com.saudicord.desktop",
+        "productName": "SaudiCord",
+        "executableName": "saudicord",
         "files": [
             "!*",
             "!node_modules",
             "dist/js",
             "static",
             "package.json",
-            "LICENSE"
+            "CREDITS.md"
         ],
         "protocols": {
             "name": "Discord",
@@ -82,7 +82,6 @@
         "linux": {
             "icon": "build/icon.svg",
             "category": "Network",
-            "maintainer": "vendicated+vesktop@riseup.net",
             "target": [
                 {
                     "target": "deb",
@@ -115,13 +114,13 @@
             ],
             "desktop": {
                 "entry": {
-                    "Name": "Vesktop",
+                    "Name": "SaudiCord",
                     "GenericName": "Internet Messenger",
                     "Type": "Application",
                     "Categories": "Network;InstantMessaging;Chat;",
-                    "Keywords": "discord;vencord;electron;chat;",
+                    "Keywords": "saudicord;discord;electron;chat;",
                     "MimeType": "x-scheme-handler/discord",
-                    "StartupWMClass": "vesktop"
+                    "StartupWMClass": "saudicord"
                 }
             }
         },
@@ -191,7 +190,9 @@
             ]
         },
         "publish": {
-            "provider": "github"
+            "provider": "github",
+            "owner": "xxm-cmyk",
+            "repo": "SaudiCord-"
         },
         "rpm": {
             "fpm": [
@@ -208,5 +209,9 @@
             "loadBrowserProcessSpecificV8Snapshot": false,
             "grantFileProtocolExtraPrivileges": false
         }
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/xxm-cmyk/SaudiCord-.git"
     }
 }
