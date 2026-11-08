@@ -81,26 +81,26 @@ function initMenuBar(win: BrowserWindow) {
 
     const subMenu = [
         {
-            label: "About SaudiCord",
+            label: "حول سعودي كورد",
             click: createAboutWindow
         },
         {
-            label: "Force Update Vencord",
+            label: "إصلاح ملفات Vencord",
             async click() {
                 await downloadVencordFiles();
                 relaunch();
             },
-            toolTip: "SaudiCord will automatically restart after this operation"
+            toolTip: "سيُعاد تشغيل سعودي كورد تلقائياً بعد هذه العملية"
         },
         {
-            label: "Reset SaudiCord",
+            label: "إعادة ضبط سعودي كورد",
             async click() {
                 await clearData(win);
             },
-            toolTip: "SaudiCord will automatically restart after this operation"
+            toolTip: "سيُعاد تشغيل سعودي كورد تلقائياً بعد هذه العملية"
         },
         {
-            label: "Relaunch",
+            label: "إعادة التشغيل",
             accelerator: "CmdOrCtrl+Shift+R",
             click: relaunch
         },
@@ -111,7 +111,7 @@ function initMenuBar(win: BrowserWindow) {
                       type: "separator"
                   },
                   {
-                      label: "Settings",
+                      label: "الإعدادات",
                       accelerator: "CmdOrCtrl+,",
                       async click() {
                           sendRendererCommand(IpcCommands.NAVIGATE_SETTINGS);
@@ -134,7 +134,7 @@ function initMenuBar(win: BrowserWindow) {
                   }
               ] satisfies MenuItemList)),
         {
-            label: "Quit",
+            label: "إنهاء",
             accelerator: wantCtrlQ ? "CmdOrCtrl+Q" : void 0,
             visible: !isWindows,
             role: "quit",
@@ -143,7 +143,7 @@ function initMenuBar(win: BrowserWindow) {
             }
         },
         isWindows && {
-            label: "Quit",
+            label: "إنهاء",
             accelerator: "Alt+F4",
             role: "quit",
             click() {
@@ -180,14 +180,14 @@ function initMenuBar(win: BrowserWindow) {
 
     const menuItems = [
         {
-            label: "SaudiCord",
+            label: "سعودي كورد",
             role: "appMenu",
             submenu: subMenu.filter(isTruthy)
         },
-        { role: "fileMenu" },
-        { role: "editMenu" },
-        { role: "viewMenu" },
-        isDarwin && { role: "windowMenu" }
+        { label: "ملف", role: "fileMenu" },
+        { label: "تحرير", role: "editMenu" },
+        { label: "عرض", role: "viewMenu" },
+        isDarwin && { label: "نافذة", role: "windowMenu" }
     ] satisfies MenuItemList;
 
     const menu = Menu.buildFromTemplate(menuItems.filter(isTruthy));
@@ -492,23 +492,23 @@ export function openDeepLink(uri: string) {
 const retryDelay = 1000;
 function retryUrl(url: string, description: string) {
     console.log(`retrying in ${retryDelay}ms`);
-    updateSplashMessage(`Failed to load Discord: ${description}`);
+    updateSplashMessage(`تعذر تحميل Discord: ${description}`);
     setTimeout(() => loadUrl(url), retryDelay);
 }
 
 async function showStartupError(error: unknown) {
     const { response } = await dialog.showMessageBox({
         type: "error",
-        message: "SaudiCord failed to start",
-        detail: `${error}\n\nRepair will re-download Vencord and restart SaudiCord.`,
-        buttons: ["Repair", "Quit"],
+        message: "تعذر تشغيل سعودي كورد",
+        detail: `${error}\n\nسيُعاد تنزيل ملفات Vencord ثم تشغيل سعودي كورد من جديد.`,
+        buttons: ["إصلاح", "إنهاء"],
         defaultId: MessageBoxChoice.Default,
         cancelId: MessageBoxChoice.Cancel
     });
 
     if (response === MessageBoxChoice.Cancel) return app.exit(1);
 
-    updateSplashMessage("Repairing Vencord...");
+    updateSplashMessage("جارٍ إصلاح ملفات Vencord...");
     downloadVencordFiles().then(relaunch, showStartupError);
 }
 
@@ -525,7 +525,7 @@ export async function createWindows() {
 
     try {
         if (!(await isValidVencordInstall(VENCORD_FILES_DIR))) {
-            updateSplashMessage("Downloading Vencord...");
+            updateSplashMessage("جارٍ تنزيل ملفات Vencord...");
             await downloadVencordFiles();
         }
 
