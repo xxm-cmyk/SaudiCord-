@@ -166,13 +166,25 @@ handle(IpcEvents.FLASH_FRAME, (_, flag: boolean) => {
     mainWin.flashFrame(flag);
 });
 
-handle(IpcEvents.CLIPBOARD_COPY_IMAGE, async (_, buf: ArrayBuffer, src: string) => {
-    src = src.replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+handle(IpcEvents.CLIPBOARD_COPY_IMAGE, async (_, buf: ArrayBuffer | Uint8Array, _src: string) => {
+    const byteLength = buf instanceof ArrayBuffer ? buf.byteLength : buf.byteLength;
+    if (byteLength < 8 || byteLength > 20 * 1024 * 1024) {
+        throw new TypeError("Invalid clipboard image size");
+    }
+
+    const bytes = buf instanceof ArrayBuffer ? Buffer.from(buf) : Buffer.from(buf.buffer, buf.byteOffset, buf.byteLength);
+    const pngSignature = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+    if (!bytes.subarray(0, pngSignature.length).equals(pngSignature)) {
+        throw new TypeError("Clipboard image must be a PNG");
+    }
+
+    const imageData = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
+    const dataUrl = `data:image/png;base64,${bytes.toString("base64")}`;
 
     clipboard.write([
         new ClipboardItem({
-            "text/html": `<img src="${src}" />`,
-            "image/png": new Blob([buf], { type: "image/png" })
+            "text/html": `<img src="${dataUrl}" />`,
+            "image/png": new Blob([imageData], { type: "image/png" })
         })
     ]);
 });
