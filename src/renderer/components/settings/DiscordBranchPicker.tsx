@@ -13,9 +13,9 @@ export const DiscordBranchPicker: SettingsComponent = ({ settings }) => {
     return (
         <SimpleErrorBoundary>
             <Select
-                placeholder="Stable"
+                placeholder="مستقر"
                 options={[
-                    { label: "Stable", value: "stable", default: true },
+                    { label: "مستقر", value: "stable", default: true },
                     { label: "Canary", value: "canary" },
                     { label: "PTB", value: "ptb" }
                 ]}
