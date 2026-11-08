@@ -12,6 +12,7 @@ import { IpcEvents } from "shared/IpcEvents";
 import { STATIC_DIR } from "shared/paths";
 
 import { Settings } from "./settings";
+import { isScreenShareAudioActive, isScreenShareRequestActive, setScreenShareAudioActive } from "./screenShareState";
 import { handle } from "./utils/ipcWrappers";
 
 let PatchBay: typeof PatchBayType | undefined;
@@ -100,11 +101,47 @@ function buildLinkData({ include, exclude }: { include?: Node[]; exclude?: Node[
     return data;
 }
 
+const ALLOWED_AUDIO_NODE_PROPERTIES = new Set([
+    "application.name",
+    "node.description",
+    "node.name",
+    "application.process.binary",
+    "application.process.id",
+    "media.name",
+    "device.id",
+    "media.class",
+    "node.virtual"
+]);
+
+function isValidAudioNodeList(value: unknown): value is Node[] {
+    return (
+        Array.isArray(value) &&
+        value.length <= 128 &&
+        value.every(node => {
+            if (!node || typeof node !== "object" || Array.isArray(node)) return false;
+
+            const entries = Object.entries(node);
+            return (
+                entries.length > 0 &&
+                entries.length <= ALLOWED_AUDIO_NODE_PROPERTIES.size &&
+                entries.every(
+                    ([key, fieldValue]) =>
+                        ALLOWED_AUDIO_NODE_PROPERTIES.has(key) &&
+                        typeof fieldValue === "string" &&
+                        fieldValue.length <= 512
+                )
+            );
+        })
+    );
+}
+
 handle(IpcEvents.VIRT_MIC_LIST, () => {
+    if (!isScreenShareRequestActive()) {
+        return { ok: true, targets: [], hasPipewirePulse };
+    }
+
     const audioPid = getRendererAudioServicePid();
-
     const { granularSelect } = Settings.store.audio ?? {};
-
     const targets = obtainVenmic()
         ?.list(granularSelect ? [] : ["application.name", "node.name"])
         .filter(s => s["application.process.id"] !== audioPid);
@@ -112,16 +149,44 @@ handle(IpcEvents.VIRT_MIC_LIST, () => {
     return targets ? { ok: true, targets, hasPipewirePulse } : { ok: false, isGlibCxxOutdated };
 });
 
-handle(IpcEvents.VIRT_MIC_START, (_, include: Node[]) => {
-    return obtainVenmic()?.link(buildLinkData({ include }));
+handle(IpcEvents.VIRT_MIC_START, async (_, include: Node[]) => {
+    if (!isScreenShareRequestActive()) throw new Error("Audio capture requires an active screen-share request");
+    if (!isValidAudioNodeList(include)) throw new TypeError("Invalid audio source selection");
+
+    const patchBay = obtainVenmic();
+    if (!patchBay) return;
+
+    try {
+        await patchBay.link(buildLinkData({ include }));
+        setScreenShareAudioActive(true);
+    } catch (error) {
+        setScreenShareAudioActive(false);
+        throw error;
+    }
 });
 
-handle(IpcEvents.VIRT_MIC_START_SYSTEM, (_, exclude: Node[]) => {
-    return obtainVenmic()?.link(buildLinkData({ exclude }));
+handle(IpcEvents.VIRT_MIC_START_SYSTEM, async (_, exclude: Node[]) => {
+    if (!isScreenShareRequestActive()) throw new Error("Audio capture requires an active screen-share request");
+    if (!isValidAudioNodeList(exclude)) throw new TypeError("Invalid audio source selection");
+
+    const patchBay = obtainVenmic();
+    if (!patchBay) return;
+
+    try {
+        await patchBay.link(buildLinkData({ exclude }));
+        setScreenShareAudioActive(true);
+    } catch (error) {
+        setScreenShareAudioActive(false);
+        throw error;
+    }
 });
 
-handle(IpcEvents.VIRT_MIC_UNMUTE, () => {
-    return obtainVenmic()?.unmute();
+handle(IpcEvents.VIRT_MIC_UNMUTE, async () => {
+    if (!isScreenShareAudioActive()) return;
+    await obtainVenmic()?.unmute();
 });
 
-handle(IpcEvents.VIRT_MIC_STOP, () => obtainVenmic()?.unlink());
+handle(IpcEvents.VIRT_MIC_STOP, async () => {
+    setScreenShareAudioActive(false);
+    await obtainVenmic()?.unlink();
+});
