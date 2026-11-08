@@ -81,7 +81,7 @@ function initMenuBar(win: BrowserWindow) {
 
     const subMenu = [
         {
-            label: "About Vesktop",
+            label: "About SaudiCord",
             click: createAboutWindow
         },
         {
@@ -90,14 +90,14 @@ function initMenuBar(win: BrowserWindow) {
                 await downloadVencordFiles();
                 relaunch();
             },
-            toolTip: "Vesktop will automatically restart after this operation"
+            toolTip: "SaudiCord will automatically restart after this operation"
         },
         {
-            label: "Reset Vesktop",
+            label: "Reset SaudiCord",
             async click() {
                 await clearData(win);
             },
-            toolTip: "Vesktop will automatically restart after this operation"
+            toolTip: "SaudiCord will automatically restart after this operation"
         },
         {
             label: "Relaunch",
@@ -290,7 +290,7 @@ function initStaticTitle(win: BrowserWindow) {
 
     addSettingsListener("staticTitle", enabled => {
         if (enabled) {
-            win.setTitle("Vesktop");
+            win.setTitle("SaudiCord");
             win.on("page-title-updated", listener);
         } else {
             win.off("page-title-updated", listener);
@@ -395,7 +395,7 @@ function buildBrowserWindowOptions(): BrowserWindowConstructorOptions {
     }
 
     if (staticTitle) {
-        options.title = "Vesktop";
+        options.title = "SaudiCord";
     }
 
     if (process.platform === "darwin") {
