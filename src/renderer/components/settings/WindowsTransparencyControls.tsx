@@ -17,28 +17,28 @@ export const WindowsTransparencyControls: SettingsComponent = ({ settings }) => 
     return (
         <div>
             <Heading tag="h5" className={Margins.bottom8}>
-                Transparency Options
+                خيارات الشفافية
             </Heading>
             <Paragraph className={Margins.bottom8}>
-                Requires a full restart. You will need a theme that supports transparency for this to work.
+                يتطلب إعادة تشغيل التطبيق واستخدام سمة تدعم الشفافية.
             </Paragraph>
 
             <SimpleErrorBoundary>
                 <Select
-                    placeholder="None"
+                    placeholder="بدون"
                     options={[
                         {
-                            label: "None",
+                            label: "بدون",
                             value: "none",
                             default: true
                         },
                         {
-                            label: "Mica (incorporates system theme + desktop wallpaper to paint the background)",
+                            label: "Mica (دمج سمة النظام وخلفية سطح المكتب)",
                             value: "mica"
                         },
-                        { label: "Tabbed (variant of Mica with stronger background tinting)", value: "tabbed" },
+                        { label: "Tabbed (نسخة Mica بتلوين أقوى للخلفية)", value: "tabbed" },
                         {
-                            label: "Acrylic (blurs the window behind Vesktop for a translucent background)",
+                            label: "Acrylic (تمويه النافذة خلف سعودي كورد)",
                             value: "acrylic"
                         }
                     ]}
