@@ -33,7 +33,12 @@ export function createFirstLaunchTour() {
         frame: true,
         autoHideMenuBar: true,
         height: 550,
-        width: 600
+        width: 600,
+        webPreferences: {
+            nodeIntegration: false,
+            contextIsolation: true,
+            sandbox: true
+        }
     });
 
     makeLinksOpenExternally(win);
