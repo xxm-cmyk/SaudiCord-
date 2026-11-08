@@ -9,7 +9,7 @@ import { mkdirSync } from "fs";
 import { access, constants as FsConstants, readFile, rename, rm, writeFile } from "fs/promises";
 import { join } from "path";
 
-import { VENCORD_FILES_DIR } from "main/vencordFilesDir";
+import { DEFAULT_VENCORD_FILES_DIR, VENCORD_FILES_DIR } from "main/vencordFilesDir";
 
 import { USER_AGENT } from "../constants";
 import { downloadFile, fetchie } from "./http";
@@ -90,6 +90,7 @@ export async function downloadVencordFiles() {
         const failed = results.find(r => r.status === "rejected");
         if (failed?.status === "rejected") throw failed.reason;
 
+        const verifiedDigests: Record<string, string> = {};
         await Promise.all(
             files.map(async ({ name, digest }) => {
                 const filePath = join(VENCORD_FILES_DIR, name + ".tmp");
@@ -100,6 +101,8 @@ export async function downloadVencordFiles() {
                 if (actualDigest !== expectedDigest) {
                     throw new Error(`SHA-256 verification failed for ${name}`);
                 }
+
+                verifiedDigests[name] = actualDigest;
             })
         );
 
@@ -107,6 +110,18 @@ export async function downloadVencordFiles() {
             files.map(({ name }) => rename(join(VENCORD_FILES_DIR, name + ".tmp"), join(VENCORD_FILES_DIR, name)))
         );
         await writeFile(join(VENCORD_FILES_DIR, "package.json"), "{}");
+        await writeFile(
+            join(VENCORD_FILES_DIR, ".saudicord-integrity.json"),
+            JSON.stringify(
+                {
+                    source: "github.com/Vendicated/Vencord",
+                    tag_name: releaseData.tag_name,
+                    files: verifiedDigests
+                },
+                null,
+                4
+            )
+        );
     } catch (error) {
         await Promise.all(temporaryFiles.map(file => rm(file, { force: true }).catch(() => {})));
         throw error;
@@ -120,5 +135,29 @@ const existsAsync = (path: string) =>
 
 export async function isValidVencordInstall(dir: string) {
     const results = await Promise.all(FILES_TO_DOWNLOAD.map(f => existsAsync(join(dir, f))));
-    return !results.includes(false);
+    if (results.includes(false)) return false;
+
+    // User-selected custom directories are an explicit trust decision. Always verify the
+    // automatically managed directory against the manifest created after a digest-checked download.
+    if (dir !== DEFAULT_VENCORD_FILES_DIR) return true;
+
+    try {
+        const manifest = JSON.parse(await readFile(join(dir, ".saudicord-integrity.json"), "utf-8"));
+        if (manifest.source !== "github.com/Vendicated/Vencord" || typeof manifest.tag_name !== "string") return false;
+
+        const checks = await Promise.all(
+            FILES_TO_DOWNLOAD.map(async name => {
+                const expected = manifest.files?.[name];
+                if (typeof expected !== "string" || !/^[a-f0-9]{64}$/i.test(expected)) return false;
+
+                const contents = await readFile(join(dir, name));
+                const actual = createHash("sha256").update(contents).digest("hex");
+                return actual === expected;
+            })
+        );
+
+        return checks.every(Boolean);
+    } catch {
+        return false;
+    }
 }
