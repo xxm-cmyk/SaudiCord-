@@ -1,3 +1,9 @@
+/*
+ * SaudiCord, an Arabic-focused Discord desktop client
+ * Copyright (c) 2026 SaudiCord contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 let activeScreenShareRequests = 0;
 let screenShareAudioActive = false;
 
