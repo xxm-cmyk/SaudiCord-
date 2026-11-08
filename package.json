@@ -121,14 +121,15 @@
             ],
             "desktop": {
                 "entry": {
-                    "Name": "SaudiCord",
+                    "Name": "سعودي كورد",
                     "GenericName": "عميل Discord للمراسلة",
                     "Type": "Application",
                     "Categories": "Network;InstantMessaging;Chat;",
                     "Keywords": "saudicord;discord;electron;chat;",
                     "MimeType": "x-scheme-handler/discord",
                     "StartupWMClass": "saudicord",
-                    "Comment": "تطبيق Discord لسطح المكتب بواجهة عربية"
+                    "Comment": "تطبيق Discord لسطح المكتب بواجهة عربية",
+                    "Icon": "saudicord"
                 }
             }
         },
