@@ -50,7 +50,12 @@ export function sendRendererCommand<T = any>(message: string, data?: any) {
 
 ipcMain.on(IpcEvents.IPC_COMMAND, (event, rawResponse: IpcResponse) => {
     // Only accept replies from the exact renderer that received the command.
-    if (!mainWin || mainWin.isDestroyed() || event.sender !== mainWin.webContents) return;
+    if (
+        !mainWin ||
+        mainWin.isDestroyed() ||
+        event.sender !== mainWin.webContents ||
+        event.senderFrame !== event.sender.mainFrame
+    ) return;
     if (!rawResponse || typeof rawResponse !== "object") return;
 
     const { nonce, ok, data } = rawResponse;
