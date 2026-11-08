@@ -50,6 +50,6 @@ function loadSettings<T extends object = any>(file: string, name: string, defaul
     return store;
 }
 
-export const Settings = loadSettings<TSettings>(SETTINGS_FILE, "Vesktop settings", DefaultVesktopSettings);
+export const Settings = loadSettings<TSettings>(SETTINGS_FILE, "SaudiCord settings", DefaultVesktopSettings);
 export const VencordSettings = loadSettings<TVencordSettings>(VENCORD_SETTINGS_FILE, "Vencord settings");
 export const State = loadSettings<TState>(STATE_FILE, "Vesktop state");
