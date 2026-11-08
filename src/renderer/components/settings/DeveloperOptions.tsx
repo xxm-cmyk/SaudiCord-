@@ -19,6 +19,10 @@ function openDeveloperOptionsModal(settings: Settings) {
     openModal(props => (
         <Modal {...props} size="lg" title="خيارات مطور سعودي كورد">
             <Heading tag="h4">موقع ملفات Vencord</Heading>
+            <Paragraph>
+                تنبيه: ملفات Vencord عبارة عن شيفرة يتم تشغيلها داخل التطبيق. لا تختَر مجلداً مخصصاً إلا إذا كنت تثق
+                بمصدر جميع ملفاته.
+            </Paragraph>
             <VencordLocationPicker settings={settings} />
 
             <Heading tag="h4" className={Margins.top16}>
