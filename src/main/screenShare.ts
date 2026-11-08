@@ -11,6 +11,7 @@ import type { StreamPick } from "renderer/components/ScreenSharePicker";
 import { IpcCommands, IpcEvents } from "shared/IpcEvents";
 
 import { sendRendererCommand } from "./ipcCommands";
+import { beginScreenShareRequest } from "./screenShareState";
 import { handle } from "./utils/ipcWrappers";
 import { isDiscordUrl } from "./utils/isDiscordUrl";
 
@@ -38,70 +39,83 @@ export function registerScreenShareHandler() {
     });
 
     session.defaultSession.setDisplayMediaRequestHandler(async (request, callback) => {
-        // the handler applies to the whole session, so other sites (e.g. opened via openLinksWithElectron) would get our picker
+        // The audio picker and native audio capture are only authorized during a real Discord screen-share request.
         if (!isDiscordUrl(request.frame?.top?.url)) return callback(null);
 
-        // request full resolution on wayland right away because we always only end up with one result anyway
-        const width = isWayland ? 1920 : 176;
-        const sources = await desktopCapturer
-            .getSources({
-                types: ["window", "screen"],
-                thumbnailSize: {
-                    width,
-                    height: width * (9 / 16)
+        const releaseRequest = beginScreenShareRequest();
+        let completed = false;
+        const finish = (streams: Streams | null) => {
+            if (completed) return;
+            completed = true;
+            releaseRequest();
+            pickerSourceIds.clear();
+            callback(streams);
+        };
+
+        try {
+            // Request full resolution on Wayland because we only end up with one result anyway.
+            const width = isWayland ? 1920 : 176;
+            const sources = await desktopCapturer
+                .getSources({
+                    types: ["window", "screen"],
+                    thumbnailSize: {
+                        width,
+                        height: width * (9 / 16)
+                    }
+                })
+                .catch(err => console.error("Error during screenshare picker", err));
+
+            if (!sources) return finish(null);
+
+            const data = sources.map(({ id, name, thumbnail }) => ({
+                id,
+                name,
+                url: thumbnail.toDataURL()
+            }));
+
+            if (isWayland) {
+                const video = data[0];
+                if (video) {
+                    const stream = await sendRendererCommand<StreamPick>(IpcCommands.SCREEN_SHARE_PICKER, {
+                        screens: [video],
+                        skipPicker: true
+                    }).catch(e => {
+                        console.error("Error during screenshare picker", e);
+                        return null;
+                    });
+
+                    if (stream === null) return finish(null);
                 }
-            })
-            .catch(err => console.error("Error during screenshare picker", err));
 
-        if (!sources) return callback(null);
-
-        const data = sources.map(({ id, name, thumbnail }) => ({
-            id,
-            name,
-            url: thumbnail.toDataURL()
-        }));
-
-        if (isWayland) {
-            const video = data[0];
-            if (video) {
-                const stream = await sendRendererCommand<StreamPick>(IpcCommands.SCREEN_SHARE_PICKER, {
-                    screens: [video],
-                    skipPicker: true
-                }).catch(e => {
-                    console.error("Error during screenshare picker", e);
-                    return null;
-                });
-
-                if (stream === null) return callback(null);
+                return finish(video ? { video: sources[0] } : null);
             }
 
-            callback(video ? { video: sources[0] } : null);
-            return;
+            pickerSourceIds = new Set(data.map(s => s.id));
+            const choice = await sendRendererCommand<StreamPick>(IpcCommands.SCREEN_SHARE_PICKER, {
+                screens: data,
+                skipPicker: false
+            }).catch(e => {
+                console.error("Error during screenshare picker", e);
+                return null;
+            });
+
+            if (!choice) return finish(null);
+
+            const source = sources.find(s => s.id === choice.id);
+            if (!source) return finish(null);
+
+            const streams: Streams = {
+                video: source
+            };
+            if (choice.audio && process.platform === "win32") {
+                // @ts-expect-error loopbackWithoutChrome is real but not documented
+                streams.audio = supportsLoopbackWithoutChrome ? "loopbackWithoutChrome" : "loopback";
+            }
+
+            return finish(streams);
+        } catch (error) {
+            console.error("Unexpected error during screen-share request:", error);
+            return finish(null);
         }
-
-        pickerSourceIds = new Set(data.map(s => s.id));
-        const choice = await sendRendererCommand<StreamPick>(IpcCommands.SCREEN_SHARE_PICKER, {
-            screens: data,
-            skipPicker: false
-        }).catch(e => {
-            console.error("Error during screenshare picker", e);
-            return null;
-        });
-        pickerSourceIds.clear();
-
-        if (!choice) return callback(null);
-
-        const source = sources.find(s => s.id === choice.id);
-        if (!source) return callback(null);
-
-        const streams: Streams = {
-            video: source
-        };
-        if (choice.audio && process.platform === "win32") {
-            // @ts-expect-error loopbackWithoutChrome is real but not documented
-            streams.audio = supportsLoopbackWithoutChrome ? "loopbackWithoutChrome" : "loopback";
-        }
-
-        callback(streams);
     });
 }
