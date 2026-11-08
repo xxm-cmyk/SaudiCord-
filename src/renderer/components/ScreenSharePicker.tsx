@@ -193,7 +193,7 @@ function AudioSettingsModal({
         <Modal
             {...modalProps}
             size="lg"
-            title={<span dir="rtl">إعدادات الصوت</span>}
+            title="إعدادات الصوت"
             actions={[{ text: "رجوع", variant: "secondary", onClick: close }]}
         >
             <div className={cl("venmic-settings")} dir="rtl" lang="ar">
@@ -712,7 +712,7 @@ function ModalComponent({
         <Modal
             {...modalProps}
             size="lg"
-            title={<span dir="rtl">مشاركة الشاشة</span>}
+            title="مشاركة الشاشة"
             actions={[
                 {
                     text: showGoBack ? "رجوع" : "إلغاء",
