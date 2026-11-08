@@ -1,13 +1,16 @@
 <!doctype html>
+<html lang="ar" dir="rtl">
 <meta charset="utf-8" />
 
 <head>
-    <title>SaudiCord Setup</title>
+    <title>إعداد سعودي كورد</title>
 
     <link rel="stylesheet" href="./common.css" type="text/css" />
 
     <style>
         body {
+            direction: rtl;
+            text-align: right;
             height: 100vh;
 
             padding: 1.5em;
@@ -83,7 +86,7 @@
 
         #buttons {
             display: flex;
-            justify-content: end;
+            justify-content: flex-start;
             gap: 0.5em;
             margin-top: auto;
         }
@@ -109,54 +112,54 @@
 </head>
 
 <body>
-    <h1>Welcome to SaudiCord</h1>
-    <p>Let's customise your experience!</p>
+    <h1>مرحباً بك في سعودي كورد</h1>
+    <p>خلّنا نضبط تجربتك.</p>
 
     <form>
         <label>
-            <h2>Discord Branch</h2>
+            <h2>نسخة Discord</h2>
             <select name="discordBranch">
-                <option value="stable">stable</option>
-                <option value="canary">canary</option>
-                <option value="ptb">ptb</option>
+                <option value="stable">مستقرة</option>
+                <option value="canary">Canary</option>
+                <option value="ptb">PTB</option>
             </select>
         </label>
 
         <label>
             <div>
-                <h2>Start with System</h2>
-                <span>Automatically open SaudiCord when your computer starts</span>
+                <h2>التشغيل مع بدء النظام</h2>
+                <span>تشغيل سعودي كورد تلقائياً عند بدء تشغيل الكمبيوتر</span>
             </div>
             <input type="checkbox" name="autoStart" />
         </label>
 
         <label>
             <div>
-                <h2>Rich Presence</h2>
-                <span>Enable Rich presence (game activity)</span>
+                <h2>الحالة والنشاط</h2>
+                <span>السماح للألعاب والتطبيقات بعرض نشاطها في Discord</span>
             </div>
             <input type="checkbox" name="richPresence" checked />
         </label>
 
         <label>
             <div>
-                <h2>Import Settings</h2>
-                <span>Import Settings from existing Vencord install (if found)</span>
+                <h2>استيراد الإعدادات</h2>
+                <span>استيراد إعدادات Vencord الموجودة على جهازك، إن وُجدت</span>
             </div>
             <input type="checkbox" name="importSettings" checked />
         </label>
 
         <label>
             <div>
-                <h2>Minimise to Tray</h2>
-                <span>Minimise to Tray when closing</span>
+                <h2>التصغير إلى شريط النظام</h2>
+                <span>تصغير التطبيق إلى شريط النظام عند إغلاق النافذة</span>
             </div>
             <input type="checkbox" name="minimizeToTray" checked />
         </label>
     </form>
     <div id="buttons">
-        <button id="cancel">Quit</button>
-        <button id="submit">Submit</button>
+        <button id="cancel">خروج</button>
+        <button id="submit">حفظ ومتابعة</button>
     </div>
 </body>
 
@@ -170,3 +173,4 @@
         e.preventDefault();
     };
 </script>
+</html>
