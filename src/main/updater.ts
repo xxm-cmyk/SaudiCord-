@@ -52,7 +52,7 @@ function openUpdater(update: UpdateInfo) {
     }
 
     updaterWindow = new BrowserWindow({
-        title: "SaudiCord Updater",
+        title: "تحديث سعودي كورد",
         autoHideMenuBar: true,
         webPreferences: {
             preload: join(__dirname, "updaterPreload.js"),
