@@ -59,7 +59,7 @@ const notes = Array.isArray(update.releaseNotes)
 for (const { version, note } of notes) {
     const section = document.createElement("section");
     const heading = document.createElement("h3");
-    heading.textContent = `Version ${version ?? update.version}`;
+    heading.textContent = `الإصدار ${version ?? update.version}`;
     section.append(heading, sanitizeReleaseNote(note));
     releaseNotes.append(section);
 }
@@ -83,7 +83,7 @@ const errorText = document.getElementById("error");
 const updateButton = document.getElementById("update-button");
 
 // electron-updater doesn't support portable installs, so link to this fork's releases instead
-if (portable) updateButton.textContent = "Download update";
+if (portable) updateButton.textContent = "تنزيل التحديث";
 
 updateButton.addEventListener("click", () => {
     if (portable) {
@@ -108,14 +108,14 @@ updateButton.addEventListener("click", () => {
         updateDialog.classList.add("hidden");
     }).catch(error => {
         updateDialog.closedBy = "any";
-        errorText.textContent = `An error occurred while downloading the update: ${String(error?.message ?? error)}`;
+        errorText.textContent = `حدث خطأ أثناء تنزيل التحديث: ${String(error?.message ?? error)}`;
     });
 });
 
 document.getElementById("later-button").addEventListener("click", () => VesktopUpdaterNative.snoozeUpdate());
 document.getElementById("ignore-button").addEventListener("click", () => {
     const confirmed = confirm(
-        "Are you sure you want to ignore this update? You will not be notified about this update again. Updates are important for security and stability."
+        "هل تريد تجاهل هذا التحديث؟ لن تتلقى إشعاراً به مرة أخرى. التحديثات مهمة للأمان والاستقرار."
     );
     if (confirmed) VesktopUpdaterNative.ignoreUpdate();
 });
@@ -123,7 +123,7 @@ document.getElementById("ignore-button").addEventListener("click", () => {
 VesktopUpdaterNative.onProgress(percent => (downloadProgress.value = percent));
 VesktopUpdaterNative.onError(message => {
     updateDialog.closedBy = "any";
-    errorText.textContent = `An error occurred while downloading the update: ${message}`;
+    errorText.textContent = `حدث خطأ أثناء تنزيل التحديث: ${message}`;
     installingDialog.close();
     updateDialog.classList.remove("hidden");
 });
