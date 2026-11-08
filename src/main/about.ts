@@ -17,7 +17,12 @@ export async function createAboutWindow() {
         center: true,
         autoHideMenuBar: true,
         height,
-        width
+        width,
+        webPreferences: {
+            nodeIntegration: false,
+            contextIsolation: true,
+            sandbox: true
+        }
     });
 
     makeLinksOpenExternally(about);
