@@ -13,7 +13,7 @@ import { Millis } from "shared/utils/millis";
 
 import { PORTABLE } from "./constants";
 import { State } from "./settings";
-import { handle } from "./utils/ipcWrappers";
+import { handle, handleForWebContents } from "./utils/ipcWrappers";
 import { makeLinksOpenExternally } from "./utils/makeLinksOpenExternally";
 import { showWindow } from "./utils/showWindow";
 import { loadView } from "./vesktopStatic";
@@ -62,16 +62,22 @@ function openUpdater(update: UpdateInfo) {
     });
     makeLinksOpenExternally(updaterWindow);
 
-    handle(UpdaterIpcEvents.GET_DATA, () => ({ update, version: app.getVersion(), portable: PORTABLE }));
-    handle(UpdaterIpcEvents.INSTALL, async () => {
+    const getUpdaterWebContents = () => updaterWindow?.webContents ?? null;
+
+    handleForWebContents(UpdaterIpcEvents.GET_DATA, getUpdaterWebContents, () => ({
+        update,
+        version: app.getVersion(),
+        portable: PORTABLE
+    }));
+    handleForWebContents(UpdaterIpcEvents.INSTALL, getUpdaterWebContents, async () => {
         await autoUpdater.downloadUpdate();
     });
-    handle(UpdaterIpcEvents.SNOOZE_UPDATE, () => {
+    handleForWebContents(UpdaterIpcEvents.SNOOZE_UPDATE, getUpdaterWebContents, () => {
         State.store.updater ??= {};
         State.store.updater.snoozeUntil = Date.now() + 1 * Millis.DAY;
         updaterWindow?.close();
     });
-    handle(UpdaterIpcEvents.IGNORE_UPDATE, () => {
+    handleForWebContents(UpdaterIpcEvents.IGNORE_UPDATE, getUpdaterWebContents, () => {
         State.store.updater ??= {};
         State.store.updater.ignoredVersion = update.version;
         updaterWindow?.close();
