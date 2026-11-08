@@ -180,7 +180,7 @@ function initMenuBar(win: BrowserWindow) {
 
     const menuItems = [
         {
-            label: "Vesktop",
+            label: "SaudiCord",
             role: "appMenu",
             submenu: subMenu.filter(isTruthy)
         },
@@ -499,8 +499,8 @@ function retryUrl(url: string, description: string) {
 async function showStartupError(error: unknown) {
     const { response } = await dialog.showMessageBox({
         type: "error",
-        message: "Vesktop failed to start",
-        detail: `${error}\n\nRepair will re-download Vencord and restart Vesktop.`,
+        message: "SaudiCord failed to start",
+        detail: `${error}\n\nRepair will re-download Vencord and restart SaudiCord.`,
         buttons: ["Repair", "Quit"],
         defaultId: MessageBoxChoice.Default,
         cancelId: MessageBoxChoice.Cancel
@@ -533,7 +533,7 @@ export async function createWindows() {
 
         mainWin = createMainWindow();
     } catch (err) {
-        console.error("Failed to start Vesktop:", err);
+        console.error("Failed to start SaudiCord:", err);
         return showStartupError(err);
     }
 
