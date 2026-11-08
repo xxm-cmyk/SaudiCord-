@@ -6,7 +6,7 @@
 
 import "./UserAssets.css";
 import { Button, FormSwitch, Text } from "@vencord/types/components";
-import { Margins, wordsFromCamel, wordsToTitle } from "@vencord/types/utils";
+import { Margins } from "@vencord/types/utils";
 import { Modal, openModal, showToast, useState } from "@vencord/types/webpack/common";
 import { UserAssetType } from "main/userAssets";
 import { useSettings } from "renderer/settings";
@@ -14,6 +14,12 @@ import { useSettings } from "renderer/settings";
 import { SettingsComponent } from "./Settings";
 
 const CUSTOMIZABLE_ASSETS: UserAssetType[] = ["splash", "tray", "trayUnread"];
+
+const ASSET_LABELS: Record<UserAssetType, string> = {
+    splash: "شاشة البداية",
+    tray: "أيقونة شريط النظام",
+    trayUnread: "أيقونة الإشعارات"
+};
 
 export const UserAssetsButton: SettingsComponent = () => {
     return <Button onClick={() => openAssetsModal()}>تخصيص مظهر التطبيق</Button>;
@@ -54,7 +60,7 @@ function Asset({ asset }: { asset: UserAssetType }) {
     return (
         <section>
             <Text size="md" weight="medium" tag="h3">
-                {wordsToTitle(wordsFromCamel(asset))}
+                {ASSET_LABELS[asset]}
             </Text>
             <div className="vcd-user-assets-asset">
                 <img
