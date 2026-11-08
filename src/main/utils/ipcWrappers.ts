@@ -10,6 +10,7 @@ import { IpcEvents, UpdaterIpcEvents } from "shared/IpcEvents";
 
 export function validateSender(frame: WebFrameMain | null, event: string) {
     if (!frame) throw new Error(`ipc[${event}]: No sender frame`);
+    if (frame !== frame.top) throw new Error(`ipc[${event}]: Subframe IPC is not allowed`);
 
     let url: URL;
     try {
