@@ -10,18 +10,26 @@ import { IpcEvents, UpdaterIpcEvents } from "shared/IpcEvents";
 
 export function validateSender(frame: WebFrameMain | null, event: string) {
     if (!frame) throw new Error(`ipc[${event}]: No sender frame`);
-    if (!frame.url) return;
 
+    let url: URL;
     try {
-        var { hostname, protocol } = new URL(frame.url);
+        url = new URL(frame.url);
     } catch {
-        throw new Error(`ipc[${event}]: Invalid URL ${frame.url}`);
+        throw new Error(`ipc[${event}]: Invalid sender URL`);
     }
 
-    if (protocol === "vesktop:") return;
+    // Never trust an empty URL or an arbitrary page using the app's custom scheme.
+    if (url.username || url.password || url.port) {
+        throw new Error(`ipc[${event}]: Sender URL contains forbidden authority fields`);
+    }
 
-    if (!DISCORD_HOSTNAMES.includes(hostname)) {
-        throw new Error(`ipc[${event}]: Disallowed hostname ${hostname}`);
+    if (url.protocol === "vesktop:") {
+        if (url.hostname === "assets" || url.hostname === "static") return;
+        throw new Error(`ipc[${event}]: Disallowed internal origin ${url.origin}`);
+    }
+
+    if (url.protocol !== "https:" || !DISCORD_HOSTNAMES.includes(url.hostname)) {
+        throw new Error(`ipc[${event}]: Disallowed sender origin ${url.origin}`);
     }
 }
 
