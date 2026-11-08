@@ -6,6 +6,8 @@ body {
 }
 
 body {
+    direction: rtl;
+    text-align: right;
     padding: 2em;
     display: flex;
     flex-direction: column;
@@ -37,7 +39,7 @@ body {
     }
 
     .value {
-        text-align: left;
+        text-align: right;
     }
 
     #current-version {
@@ -57,7 +59,7 @@ body {
 #buttons {
     display: flex;
     gap: 0.5em;
-    justify-content: end;
+    justify-content: flex-start;
 }
 
 button {
