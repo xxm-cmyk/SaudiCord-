@@ -15,23 +15,23 @@ export const WebRTCIPHandlingPolicyPicker: SettingsComponent = ({ settings }) =>
         <SimpleErrorBoundary>
             <div>
                 <Heading tag="h5" className={Margins.bottom8}>
-                    WebRTC IP Handling Policy
+                    سياسة التعامل مع عنوان IP في WebRTC
                 </Heading>
                 <Paragraph className={Margins.bottom8}>
-                    Changing this may help with voice connection issues on some networks, most notably VPNs like
+                    قد يساعد تغيير هذا الخيار في حل مشكلات الاتصال الصوتي في بعض الشبكات، خصوصاً عند استخدام VPN مثل
                     Tailscale.
                 </Paragraph>
                 <Select
-                    placeholder="Default"
+                    placeholder="افتراضي"
                     options={[
-                        { label: "Default", value: "default", default: true },
-                        { label: "Default Public Interface Only", value: "default_public_interface_only" },
+                        { label: "افتراضي", value: "default", default: true },
+                        { label: "الواجهة العامة الافتراضية فقط", value: "default_public_interface_only" },
 
                         {
-                            label: "Default Public And Private Interfaces",
+                            label: "الواجهات العامة والخاصة الافتراضية",
                             value: "default_public_and_private_interfaces"
                         },
-                        { label: "Disable Non-Proxied UDP", value: "disable_non_proxied_udp" }
+                        { label: "تعطيل UDP غير المار عبر وسيط", value: "disable_non_proxied_udp" }
                     ]}
                     closeOnSelect={true}
                     select={v => (settings.webRTCIPHandlingPolicy = v)}
