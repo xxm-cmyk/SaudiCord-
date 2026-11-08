@@ -5,36 +5,20 @@
  */
 
 import { Card, ErrorBoundary, Heading, Paragraph, TextButton } from "@vencord/types/components";
-import { FluxDispatcher, InviteActions } from "@vencord/types/webpack/common";
 import type { PropsWithChildren } from "react";
 
-async function openSupportChannel() {
-    const code = "YVbdG2ZRG4";
-
-    try {
-        const { invite } = await InviteActions.resolveInvite(code, "Desktop Modal");
-
-        if (!invite) throw 0;
-
-        await FluxDispatcher.dispatch({
-            type: "INVITE_MODAL_OPEN",
-            invite,
-            code,
-            context: "APP"
-        });
-    } catch {
-        window.open(`https://discord.gg/${code}`, "_blank");
-    }
+function openSupportChannel() {
+    window.open("https://github.com/xxm-cmyk/SaudiCord-/issues", "_blank");
 }
 
 function Fallback() {
     return (
         <Card variant="danger">
-            <Heading tag="h4">Something went wrong.</Heading>
+            <Heading tag="h4">حدث خطأ غير متوقع.</Heading>
             <Paragraph>
-                Please make sure Vencord and Vesktop are fully up to date. You can get help in our{" "}
+                تأكد من تحديث سعودي كورد وVencord. يمكنك الإبلاغ عن المشكلة عبر{" "}
                 <TextButton variant="link" onClick={openSupportChannel}>
-                    Support Channel
+                    صفحة المشكلات
                 </TextButton>
             </Paragraph>
         </Card>
