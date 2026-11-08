@@ -12,17 +12,17 @@ import { Settings } from "shared/settings";
 import { cl, SettingsComponent } from "./Settings";
 
 export const DeveloperOptionsButton: SettingsComponent = ({ settings }) => {
-    return <Button onClick={() => openDeveloperOptionsModal(settings)}>Open Developer Settings</Button>;
+    return <Button onClick={() => openDeveloperOptionsModal(settings)}>فتح إعدادات المطور</Button>;
 };
 
 function openDeveloperOptionsModal(settings: Settings) {
     openModal(props => (
-        <Modal {...props} size="lg" title="Vesktop Developer Options">
-            <Heading tag="h4">Vencord Location</Heading>
+        <Modal {...props} size="lg" title="خيارات مطور سعودي كورد">
+            <Heading tag="h4">موقع ملفات Vencord</Heading>
             <VencordLocationPicker settings={settings} />
 
             <Heading tag="h4" className={Margins.top16}>
-                Debugging
+                استكشاف الأخطاء
             </Heading>
             <div className={cl("button-grid")}>
                 <Button onClick={() => VesktopNative.debug.launchGpu()}>Open chrome://gpu</Button>
@@ -50,10 +50,10 @@ const VencordLocationPicker: SettingsComponent = () => {
                             VesktopNative.fileManager.showCustomVencordDir();
                         }}
                     >
-                        a custom location
+                        مجلد مخصص
                     </TextButton>
                 ) : (
-                    "the default location"
+                    "المجلد الافتراضي"
                 )}
             </Paragraph>
             <div className={cl("button-grid")}>
@@ -68,7 +68,7 @@ const VencordLocationPicker: SettingsComponent = () => {
                                 break;
                             case "invalid":
                                 showToast({
-                                    text: "You did not choose a valid Vencord install. Make sure you're selecting the dist dir!",
+                                    text: "المجلد المحدد لا يحتوي على تثبيت Vencord صالح. تأكد من اختيار مجلد dist.",
                                     variant: "critical"
                                 });
                                 break;
@@ -76,7 +76,7 @@ const VencordLocationPicker: SettingsComponent = () => {
                         forceUpdate();
                     }}
                 >
-                    Change
+                    تغيير
                 </Button>
                 <Button
                     variant="dangerPrimary"
@@ -85,7 +85,7 @@ const VencordLocationPicker: SettingsComponent = () => {
                         forceUpdate();
                     }}
                 >
-                    Reset
+                    إعادة ضبط
                 </Button>
             </div>
         </>
