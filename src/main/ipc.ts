@@ -159,9 +159,16 @@ handle(IpcEvents.SELECT_VENCORD_DIR, async (_e, value?: null) => {
     return "ok";
 });
 
-handle(IpcEvents.SET_BADGE_COUNT, (_, count: number) => setBadgeCount(count));
+handle(IpcEvents.SET_BADGE_COUNT, (_, count: number) => {
+    if (!Number.isInteger(count) || count < -1 || count > 9999) {
+        throw new TypeError("Invalid notification badge count");
+    }
+
+    setBadgeCount(count);
+});
 
 handle(IpcEvents.FLASH_FRAME, (_, flag: boolean) => {
+    if (typeof flag !== "boolean") throw new TypeError("Invalid taskbar flash state");
     if (!mainWin || mainWin.isDestroyed() || (flag && mainWin.isFocused())) return;
     mainWin.flashFrame(flag);
 });
