@@ -15,7 +15,7 @@
 
 ## Project status
 
-SaudiCord is in early development. This repository currently contains the upstream Vesktop codebase as its foundation. SaudiCord-specific interface, localization, plugin-management, and security changes are planned work; do not assume they are already implemented or that a production-ready build is available.
+SaudiCord is in early development. The current code includes Arabic first-launch, about, updater, and native settings surfaces; an Arabic browser locale is requested for Discord. Full Discord interface translation and complete RTL behavior are not yet verified. Plugin review/management and production-grade signed updates are still pending. Do not assume this is a production-ready build.
 
 ## Upstream foundation and acknowledgements
 
