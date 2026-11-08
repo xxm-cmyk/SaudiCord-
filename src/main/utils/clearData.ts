@@ -13,9 +13,9 @@ import { relaunch } from "./relaunch";
 
 export async function clearData(win: BrowserWindow) {
     const { response } = await dialog.showMessageBox(win, {
-        message: "Are you sure you want to reset Vesktop?",
-        detail: "This will log you out, clear caches and reset all your settings!\n\nVesktop will automatically restart after this operation.",
-        buttons: ["Yes", "No"],
+        message: "هل أنت متأكد من إعادة ضبط سعودي كورد؟",
+        detail: "سيؤدي ذلك إلى تسجيل خروجك ومسح ذاكرة التخزين المؤقت وإعادة ضبط جميع الإعدادات.\n\nسيُعاد تشغيل سعودي كورد تلقائياً بعد هذه العملية.",
+        buttons: ["نعم", "لا"],
         cancelId: MessageBoxChoice.Cancel,
         defaultId: MessageBoxChoice.Default,
         type: "warning"
