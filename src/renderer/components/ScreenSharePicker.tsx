@@ -35,16 +35,22 @@ import { isLinux, isWindows } from "renderer/utils";
 
 import { SimpleErrorBoundary } from "./SimpleErrorBoundary";
 
-const StreamResolutions = ["480", "720", "1080", "1440", "2160", "0"] as const;
-const StreamResolutionLabels = ["480", "720", "1080", "1440", "2160", "Source"];
+const Streamالدقةs = ["480", "720", "1080", "1440", "2160", "0"] as const;
+const StreamالدقةLabels = ["480", "720", "1080", "1440", "2160", "المصدر"];
 const StreamFps = ["15", "30", "60"] as const;
 
 const cl = classNameFactory("vcd-screen-picker-");
 
-export type StreamResolution = (typeof StreamResolutions)[number];
+export type Streamالدقة = (typeof Streamالدقةs)[number];
 export type StreamFps = (typeof StreamFps)[number];
 
 type SpecialSource = "None" | "Entire System";
+
+function localizeAudioSourceName(name: string) {
+    if (name === "None") return "بدون";
+    if (name === "Entire System") return "النظام بالكامل";
+    return name;
+}
 
 type AudioSource = SpecialSource | Node;
 type AudioSources = SpecialSource | Node[];
@@ -187,39 +193,38 @@ function AudioSettingsModal({
         <Modal
             {...modalProps}
             size="lg"
-            title="Audio Settings"
-            actions={[{ text: "Back", variant: "secondary", onClick: close }]}
+            title="إعدادات الصوت"
+            actions={[{ text: "رجوع", variant: "secondary", onClick: close }]}
         >
             <div className={cl("venmic-settings")}>
                 <FormSwitch
-                    title="Initial Mute"
-                    description="Fix an initial audio spike caused by chromium."
+                    title="كتم الصوت عند البدء"
+                    description="معالجة ارتفاع مفاجئ في مستوى الصوت عند بدء المشاركة."
                     hideBorder
                     onChange={v => (Settings.audio = { ...Settings.audio, mute: v })}
                     value={Settings.audio?.mute ?? true}
                 />
                 <FormSwitch
-                    title="Microphone Workaround"
-                    description="Work around an issue that causes the microphone to be shared instead of the correct audio. Only enable if you're experiencing this issue."
+                    title="حل بديل للميكروفون"
+                    description="معالجة مشكلة قد تؤدي إلى مشاركة صوت الميكروفون بدلاً من الصوت المطلوب. فعّل هذا الخيار فقط إذا واجهت المشكلة."
                     hideBorder
                     onChange={v => (Settings.audio = { ...Settings.audio, workaround: v })}
                     value={Settings.audio?.workaround ?? false}
                 />
                 <FormSwitch
-                    title="Only Speakers"
+                    title="مكبرات الصوت فقط"
                     description={
-                        'When sharing entire desktop audio, only share apps that play to a speaker. You may want to disable this when using "mix bussing".'
+                        "عند مشاركة صوت سطح المكتب بالكامل، شارك التطبيقات التي يخرج صوتها عبر مكبر صوت فقط."
                     }
                     hideBorder
                     onChange={v => (Settings.audio = { ...Settings.audio, onlySpeakers: v })}
                     value={Settings.audio?.onlySpeakers ?? true}
                 />
                 <FormSwitch
-                    title="Only Default Speakers"
+                    title="مكبر الصوت الافتراضي فقط"
                     description={
                         <>
-                            When sharing entire desktop audio, only share apps that play to the <b>default</b> speakers.
-                            You may want to disable this when using "mix bussing".
+                            عند مشاركة صوت سطح المكتب بالكامل، شارك التطبيقات التي يخرج صوتها عبر مكبر الصوت <b>الافتراضي</b> فقط.
                         </>
                     }
                     hideBorder
@@ -227,24 +232,24 @@ function AudioSettingsModal({
                     value={Settings.audio?.onlyDefaultSpeakers ?? true}
                 />
                 <FormSwitch
-                    title="Ignore Inputs"
-                    description="Exclude nodes that are intended to capture audio."
+                    title="تجاهل أجهزة الإدخال"
+                    description="استبعاد الأجهزة المخصصة لالتقاط الصوت."
                     hideBorder
                     onChange={v => (Settings.audio = { ...Settings.audio, ignoreInputMedia: v })}
                     value={Settings.audio?.ignoreInputMedia ?? true}
                 />
                 <FormSwitch
-                    title="Ignore Virtual"
+                    title="تجاهل الأجهزة الافتراضية"
                     description={
-                        'Exclude virtual nodes, such as nodes belonging to loopbacks. This might be useful when using "mix bussing".'
+                        "استبعاد الأجهزة الافتراضية، مثل أجهزة إعادة توجيه الصوت."
                     }
                     hideBorder
                     onChange={v => (Settings.audio = { ...Settings.audio, ignoreVirtual: v })}
                     value={Settings.audio?.ignoreVirtual ?? false}
                 />
                 <FormSwitch
-                    title="Ignore Devices"
-                    description="Exclude device nodes, such as nodes belonging to microphones or speakers."
+                    title="تجاهل الأجهزة"
+                    description="استبعاد الأجهزة مثل الميكروفونات ومكبرات الصوت."
                     hideBorder
                     onChange={v =>
                         (Settings.audio = {
@@ -256,8 +261,8 @@ function AudioSettingsModal({
                     value={Settings.audio?.ignoreDevices ?? true}
                 />
                 <FormSwitch
-                    title="Granular Selection"
-                    description="Allow to select applications more granularly."
+                    title="اختيار تفصيلي"
+                    description="السماح باختيار التطبيقات ومصادر الصوت بشكل أكثر تفصيلاً."
                     hideBorder
                     onChange={value => {
                         Settings.audio = { ...Settings.audio, granularSelect: value };
@@ -266,11 +271,10 @@ function AudioSettingsModal({
                     value={Settings.audio?.granularSelect ?? false}
                 />
                 <FormSwitch
-                    title="Device Selection"
+                    title="اختيار الأجهزة"
                     description={
                         <>
-                            Allow to select devices such as microphones. Requires <b>Ignore Devices</b> to be turned
-                            off.
+                            السماح باختيار أجهزة مثل الميكروفونات. يتطلب إيقاف خيار <b>تجاهل الأجهزة</b>.
                         </>
                     }
                     hideBorder
@@ -351,7 +355,7 @@ function StreamSettingsUi({
     return (
         <div>
             <Heading tag="h4" className={Margins.bottom8}>
-                What you're streaming
+                ما تشاركه الآن
             </Heading>
             <Card className={cl("card", "preview")}>
                 <img src={thumb} alt="" className={cl(isLinux ? "preview-img-linux" : "preview-img")} />
@@ -359,18 +363,18 @@ function StreamSettingsUi({
             </Card>
 
             <Heading tag="h4" className={Margins.bottom8}>
-                Stream Settings
+                إعدادات البث
             </Heading>
 
             <Card className={cl("card")}>
                 <div className={cl("quality")}>
                     <section className={cl("quality-section")}>
                         <Heading tag="h5" className={Margins.bottom8}>
-                            Resolution
+                            الدقة
                         </Heading>
                         <OptionRadio
-                            options={StreamResolutions}
-                            labels={StreamResolutionLabels}
+                            options={Streamالدقةs}
+                            labels={StreamالدقةLabels}
                             settings={qualitySettings}
                             settingsKey="resolution"
                             onChange={value => (qualitySettings.resolution = value)}
@@ -379,7 +383,7 @@ function StreamSettingsUi({
 
                     <section className={cl("quality-section")}>
                         <Heading tag="h5" className={Margins.bottom8}>
-                            Frame Rate
+                            معدل الإطارات
                         </Heading>
                         <OptionRadio
                             options={StreamFps}
@@ -392,12 +396,12 @@ function StreamSettingsUi({
                 <div className={cl("quality")}>
                     <section className={cl("quality-section")}>
                         <Heading tag="h5" className={Margins.bottom8}>
-                            Content Type
+                            نوع المحتوى
                         </Heading>
                         <div>
                             <OptionRadio
                                 options={["motion", "detail"]}
-                                labels={["Prefer Smoothness", "Prefer Clarity"]}
+                                labels={["تفضيل السلاسة", "تفضيل الوضوح"]}
                                 settings={settings}
                                 settingsKey="contentHint"
                                 onChange={option => setSettings(s => ({ ...s, contentHint: option }))}
@@ -410,7 +414,7 @@ function StreamSettingsUi({
                         </div>
                         {isWindows && (
                             <FormSwitch
-                                title="Stream With Audio"
+                                title="مشاركة الصوت"
                                 hideBorder
                                 value={settings.audio}
                                 onChange={checked => setSettings(s => ({ ...s, audio: checked }))}
@@ -561,19 +565,19 @@ function AudioSourcePickerLinux({
     if (!sources.ok && sources.isGlibCxxOutdated) {
         return (
             <Paragraph>
-                Failed to retrieve Audio Sources because your C++ library is too old to run
+                تعذر جلب مصادر الصوت لأن مكتبة C++ المثبتة قديمة ولا يمكنها تشغيل
                 <a href="https://github.com/Vencord/venmic" target="_blank" rel="noreferrer">
                     venmic
                 </a>
-                . See{" "}
+                . راجع{" "}
                 <a
                     href="https://gist.github.com/Vendicated/b655044ffbb16b2716095a448c6d827a"
                     target="_blank"
                     rel="noreferrer"
                 >
-                    this guide
+                    هذا الدليل
                 </a>{" "}
-                for possible solutions.
+                للاطلاع على الحلول الممكنة.
             </Paragraph>
         );
     }
@@ -581,18 +585,18 @@ function AudioSourcePickerLinux({
     if (!hasPipewirePulse && !ignorePulseWarning) {
         return (
             <Paragraph>
-                Could not find pipewire-pulse. See{" "}
+                Could not find pipewire-pulse. راجع{" "}
                 <a
                     href="https://gist.github.com/the-spyke/2de98b22ff4f978ebf0650c90e82027e#install"
                     target="_blank"
                     rel="noreferrer"
                 >
-                    this guide
+                    هذا الدليل
                 </a>{" "}
-                on how to switch to pipewire. <br />
-                You can still continue, however, please{" "}
-                <b>beware that you can only share audio of apps that are running under pipewire</b>.{" "}
-                <a onClick={() => setIgnorePulseWarning(true)}>I know what I'm doing!</a>
+                لمعرفة طريقة التبديل إلى PipeWire. <br />
+                يمكنك المتابعة، لكن انتبه إلى أن{" "}
+                <b>مشاركة الصوت ستعمل فقط مع التطبيقات التي تعمل عبر PipeWire</b>.{" "}
+                <a onClick={() => setIgnorePulseWarning(true)}>أفهم ما أفعله!</a>
             </Paragraph>
         );
     }
@@ -614,12 +618,12 @@ function AudioSourcePickerLinux({
             <div className={cl("audio-sources")}>
                 <section>
                     <Heading tag="h5" className={Margins.bottom8}>
-                        {loading ? "Loading Sources..." : "Audio Sources"}
+                        {loading ? "جارٍ تحميل المصادر..." : "مصادر الصوت"}
                     </Heading>
                     <SimpleErrorBoundary>
                         <Select
                             options={allSources.map(({ name, value }) => ({
-                                label: name,
+                                label: localizeAudioSourceName(name),
                                 value: value,
                                 default: name === "None"
                             }))}
@@ -635,14 +639,14 @@ function AudioSourcePickerLinux({
                 {includeSources === "Entire System" && (
                     <section>
                         <Heading tag="h5" className={Margins.bottom8}>
-                            Exclude Sources
+                            استثناء المصادر
                         </Heading>
                         <SimpleErrorBoundary>
                             <Select
                                 options={allSources
                                     .filter(x => x.name !== "Entire System")
                                     .map(({ name, value }) => ({
-                                        label: name,
+                                        label: localizeAudioSourceName(name),
                                         value: value,
                                         default: name === "None"
                                     }))}
@@ -660,11 +664,11 @@ function AudioSourcePickerLinux({
             <div className={cl("settings-buttons")}>
                 <Button variant="secondary" onClick={refreshAudioSources} className={cl("settings-button")}>
                     <RestartIcon className={cl("settings-button-icon")} />
-                    Refresh Audio Sources
+                    تحديث مصادر الصوت
                 </Button>
                 <Button variant="secondary" onClick={openSettings} className={cl("settings-button")}>
                     <CogWheel className={cl("settings-button-icon")} />
-                    Open Audio Settings
+                    فتح إعدادات الصوت
                 </Button>
             </div>
         </>
@@ -709,15 +713,15 @@ function ModalComponent({
         <Modal
             {...modalProps}
             size="lg"
-            title="Screen Share Picker"
+            title="مشاركة الشاشة"
             actions={[
                 {
-                    text: showGoBack ? "Back" : "Cancel",
+                    text: showGoBack ? "رجوع" : "إلغاء",
                     variant: "secondary",
                     onClick: () => (showGoBack ? setSelected(void 0) : close())
                 },
                 {
-                    text: "Go Live",
+                    text: "بدء البث",
                     disabled: !selected,
                     onClick: handleGoLive
                 }
