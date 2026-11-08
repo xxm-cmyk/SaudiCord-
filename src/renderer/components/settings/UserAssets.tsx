@@ -16,12 +16,12 @@ import { SettingsComponent } from "./Settings";
 const CUSTOMIZABLE_ASSETS: UserAssetType[] = ["splash", "tray", "trayUnread"];
 
 export const UserAssetsButton: SettingsComponent = () => {
-    return <Button onClick={() => openAssetsModal()}>Customize App Assets</Button>;
+    return <Button onClick={() => openAssetsModal()}>تخصيص مظهر التطبيق</Button>;
 };
 
 function openAssetsModal() {
     openModal(props => (
-        <Modal {...props} size="lg" title="User Assets">
+        <Modal {...props} size="lg" title="ملفات المظهر">
             <div className="vcd-user-assets">
                 {CUSTOMIZABLE_ASSETS.map(asset => (
                     <Asset key={asset} asset={asset} />
@@ -47,7 +47,7 @@ function Asset({ asset }: { asset: UserAssetType }) {
                 settings.splashPixelated = false;
             }
         } else if (res === "failed") {
-            showToast({ text: "Something went wrong. Please try again", variant: "critical" });
+            showToast({ text: "حدث خطأ. حاول مرة أخرى.", variant: "critical" });
         }
     };
 
@@ -65,14 +65,14 @@ function Asset({ asset }: { asset: UserAssetType }) {
                 />
                 <div className="vcd-user-assets-actions">
                     <div className="vcd-user-assets-buttons">
-                        <Button onClick={onChooseAsset()}>Customize</Button>
+                        <Button onClick={onChooseAsset()}>تخصيص</Button>
                         <Button variant="secondary" onClick={onChooseAsset(null)}>
-                            Reset to default
+                            استعادة الافتراضي
                         </Button>
                     </div>
                     {isSplash && (
                         <FormSwitch
-                            title="Nearest-Neighbor Scaling (for pixel art)"
+                            title="تكبير أقرب جار (للصور البكسلية)"
                             value={settings.splashPixelated}
                             onChange={val => (settings.splashPixelated = val)}
                             className={Margins.top16}
