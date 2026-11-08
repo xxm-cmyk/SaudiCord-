@@ -29,9 +29,9 @@ function openDeveloperOptionsModal(settings: Settings) {
                 استكشاف الأخطاء
             </Heading>
             <div className={cl("button-grid")}>
-                <Button onClick={() => VesktopNative.debug.launchGpu()}>Open chrome://gpu</Button>
+                <Button onClick={() => VesktopNative.debug.launchGpu()}>فتح معلومات بطاقة الرسوميات</Button>
                 <Button onClick={() => VesktopNative.debug.launchWebrtcInternals()}>
-                    Open chrome://webrtc-internals
+                    فتح معلومات WebRTC
                 </Button>
             </div>
         </Modal>
