@@ -24,7 +24,7 @@ SaudiCord is based on **Vesktop**, developed by the Vencord contributors.
 - Upstream project: https://github.com/Vencord/Vesktop
 - Upstream organization: https://github.com/Vencord
 - Vesktop website: https://vesktop.dev
-- License: GNU General Public License v3.0 (GPL-3.0)
+- License: GNU General Public License v3.0 or later (GPL-3.0-or-later)
 
 Upstream copyright notices remain in the source files. The derived Vesktop code is marked GPL-3.0-or-later. This development repository currently does not bundle a `LICENSE` file; do not distribute source archives or application binaries until the required license text and all applicable notices are included. See [CREDITS.md](./CREDITS.md). Third-party dependencies and assets may have their own licenses.
 
