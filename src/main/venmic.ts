@@ -101,17 +101,7 @@ function buildLinkData({ include, exclude }: { include?: Node[]; exclude?: Node[
     return data;
 }
 
-const ALLOWED_AUDIO_NODE_PROPERTIES = new Set([
-    "application.name",
-    "node.description",
-    "node.name",
-    "application.process.binary",
-    "application.process.id",
-    "media.name",
-    "device.id",
-    "media.class",
-    "node.virtual"
-]);
+const FORBIDDEN_AUDIO_NODE_PROPERTIES = new Set(["__proto__", "prototype", "constructor"]);
 
 function isValidAudioNodeList(value: unknown): value is Node[] {
     return (
@@ -122,11 +112,11 @@ function isValidAudioNodeList(value: unknown): value is Node[] {
 
             const entries = Object.entries(node);
             return (
-                entries.length > 0 &&
-                entries.length <= ALLOWED_AUDIO_NODE_PROPERTIES.size &&
+                entries.length <= 64 &&
                 entries.every(
                     ([key, fieldValue]) =>
-                        ALLOWED_AUDIO_NODE_PROPERTIES.has(key) &&
+                        /^[a-z0-9._-]{1,128}$/i.test(key) &&
+                        !FORBIDDEN_AUDIO_NODE_PROPERTIES.has(key) &&
                         typeof fieldValue === "string" &&
                         fieldValue.length <= 512
                 )
