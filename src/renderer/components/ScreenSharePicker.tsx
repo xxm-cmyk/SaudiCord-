@@ -408,8 +408,7 @@ function StreamSettingsUi({
                             />
 
                             <Paragraph className={Margins.top8}>
-                                Choosing "Prefer Clarity" will result in a significantly lower framerate in exchange for
-                                a much sharper and clearer image.
+                                اختيار "تفضيل الوضوح" يقلل معدل الإطارات بشكل ملحوظ مقابل صورة أكثر حدة ووضوحاً.
                             </Paragraph>
                         </div>
                         {isWindows && (
