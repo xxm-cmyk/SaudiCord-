@@ -1,9 +1,16 @@
 {
     "name": "saudicord",
-    "version": "1.6.9",
+    "version": "0.1.0",
     "private": true,
     "description": "An Arabic-focused desktop client for Discord, based on Vesktop.",
-    "keywords": [],
+    "keywords": [
+        "saudicord",
+        "discord",
+        "arabic",
+        "rtl",
+        "electron",
+        "desktop-client"
+    ],
     "homepage": "https://github.com/xxm-cmyk/SaudiCord-",
     "license": "GPL-3.0-or-later",
     "author": "SaudiCord contributors",
