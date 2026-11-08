@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { ipcMain, IpcMainEvent, IpcMainInvokeEvent, WebFrameMain } from "electron";
+import { ipcMain, IpcMainEvent, IpcMainInvokeEvent, WebContents, WebFrameMain } from "electron";
 import { DISCORD_HOSTNAMES } from "main/constants";
 import { IpcEvents, UpdaterIpcEvents } from "shared/IpcEvents";
 
@@ -42,6 +42,26 @@ export function handleSync(event: IpcEvents | UpdaterIpcEvents, cb: (e: IpcMainE
 
 export function handle(event: IpcEvents | UpdaterIpcEvents, cb: (e: IpcMainInvokeEvent, ...args: any[]) => any) {
     ipcMain.handle(event, (e, ...args) => {
+        validateSender(e.senderFrame, event);
+        return cb(e, ...args);
+    });
+}
+
+/**
+ * Register an IPC handler that is restricted to one specific BrowserWindow.
+ * This is intended for privileged auxiliary windows such as the updater.
+ */
+export function handleForWebContents(
+    event: UpdaterIpcEvents,
+    getExpectedWebContents: () => WebContents | null,
+    cb: (e: IpcMainInvokeEvent, ...args: any[]) => any
+) {
+    ipcMain.handle(event, (e, ...args) => {
+        const expected = getExpectedWebContents();
+        if (!expected || e.sender !== expected || e.senderFrame !== e.sender.mainFrame) {
+            throw new Error(`ipc[${event}]: Disallowed sender WebContents`);
+        }
+
         validateSender(e.senderFrame, event);
         return cb(e, ...args);
     });
