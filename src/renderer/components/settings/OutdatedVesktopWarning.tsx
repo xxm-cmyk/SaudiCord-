@@ -16,11 +16,11 @@ export function OutdatedVesktopWarning() {
 
     return (
         <Card variant="warning" className={cl("updater-card")}>
-            <Heading tag="h4">Your Vesktop is outdated!</Heading>
-            <Paragraph>Staying up to date is important for security and stability.</Paragraph>
+            <Heading tag="h4">إصدار سعودي كورد قديم!</Heading>
+            <Paragraph>التحديث مهم للحفاظ على الأمان والاستقرار.</Paragraph>
 
             <Button onClick={() => VesktopNative.app.openUpdater()} variant="secondary">
-                Open Updater
+                فتح التحديثات
             </Button>
         </Card>
     );
