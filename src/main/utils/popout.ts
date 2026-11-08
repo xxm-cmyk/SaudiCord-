@@ -48,7 +48,8 @@ const DEFAULT_POPOUT_OPTIONS: BrowserWindowConstructorOptions = {
             : undefined,
     webPreferences: {
         nodeIntegration: false,
-        contextIsolation: true
+        contextIsolation: true,
+        sandbox: true
     },
     autoHideMenuBar: Settings.store.enableMenu
 };
