@@ -124,10 +124,10 @@ function init() {
 
 if (!app.requestSingleInstanceLock({ IS_DEV })) {
     if (IS_DEV) {
-        console.log("Vesktop is already running. Quitting previous instance...");
+        console.log("SaudiCord is already running. Quitting previous instance...");
         init();
     } else {
-        console.log("Vesktop is already running. Quitting...");
+        console.log("SaudiCord is already running. Quitting...");
         app.quit();
     }
 } else {
