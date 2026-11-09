@@ -65,24 +65,69 @@ function fromTemplate(
     if (cursor < translated.length) result.push(translated.slice(cursor));
     if (used.size !== originalArguments.size) return null;
 
-    return [RTL_START, ...result, RTL_END];
+    return result;
 }
 
-function translateValue(value: unknown): unknown {
+function containsArabic(value: unknown): boolean {
+    if (typeof value === "string") return /[\\u0600-\\u06FF]/.test(value);
+    if (Array.isArray(value)) return value.some(containsArabic);
+    if (value && typeof value === "object") return Object.values(value).some(containsArabic);
+    return false;
+}
+
+function isolateRtl(value: unknown): unknown {
+    if (!containsArabic(value)) return value;
+
     if (typeof value === "string") {
-        const translated = ARABIC_TRANSLATIONS[value];
-        return translated ? `${RTL_START}${translated}${RTL_END}` : value;
+        return value.startsWith(RTL_START) && value.endsWith(RTL_END)
+            ? value
+            : `${RTL_START}${value}${RTL_END}`;
     }
 
-    if (!Array.isArray(value)) return value;
+    if (Array.isArray(value)) {
+        if (value[0] === RTL_START && value[value.length - 1] === RTL_END) return value;
+        return [RTL_START, ...value, RTL_END];
+    }
 
-    const parsed = toTemplate(value);
-    if (!parsed) return value;
+    return value;
+}
 
-    const translated = ARABIC_TRANSLATIONS[parsed.template];
-    if (!translated) return value;
+/**
+ * Translate exact reviewed templates at every level of Discord's message AST.
+ * Nested plural/select/rich-text branches are traversed instead of being
+ * abandoned when a complex argument is encountered.
+ */
+function translateValue(value: unknown): unknown {
+    if (typeof value === "string") return ARABIC_TRANSLATIONS[value] ?? value;
 
-    return fromTemplate(translated, parsed.arguments) ?? value;
+    if (Array.isArray(value)) {
+        const parsed = toTemplate(value);
+        if (parsed) {
+            const translated = ARABIC_TRANSLATIONS[parsed.template];
+            if (translated) return fromTemplate(translated, parsed.arguments) ?? value;
+        }
+
+        let changed = false;
+        const result = value.map(part => {
+            const next = translateValue(part);
+            if (next !== part) changed = true;
+            return next;
+        });
+        return changed ? result : value;
+    }
+
+    if (value && typeof value === "object") {
+        let changed = false;
+        const result: Record<string, unknown> = {};
+        for (const [key, part] of Object.entries(value)) {
+            const next = translateValue(part);
+            if (next !== part) changed = true;
+            result[key] = next;
+        }
+        return changed ? result : value;
+    }
+
+    return value;
 }
 
 /**
@@ -97,7 +142,8 @@ function translateMessageTable(input: unknown): MessageTable {
         const template = messageTemplate(value);
         if (template !== null) seenMessages.set(key, template);
 
-        const next = translateValue(value);
+        const translatedValue = translateValue(value);
+        const next = isolateRtl(translatedValue);
         if (next !== value) translatedMessages.add(key);
         translated[key] = next;
     }
@@ -165,6 +211,11 @@ addPatch({
     ensureTranslator() {
         if (typeof bridge.SaudiCordTranslateMessages !== "function") {
             bridge.SaudiCordTranslateMessages = translateMessageTable;
+        }
+        if (typeof document !== "undefined") {
+            document.documentElement.lang = "ar";
+            document.documentElement.dir = "rtl";
+            document.body?.setAttribute("dir", "rtl");
         }
     }
 });
