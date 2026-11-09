@@ -13,6 +13,9 @@ import { invoke } from "./typedIpc";
 contextBridge.exposeInMainWorld("VesktopUpdaterNative", {
     getData: () => invoke<{ update: UpdateInfo; version: string; portable: boolean }>(UpdaterIpcEvents.GET_DATA),
     installUpdate: () => invoke(UpdaterIpcEvents.INSTALL),
+    onDownloaded: (cb: () => void) => {
+        ipcRenderer.on(UpdaterIpcEvents.DOWNLOADED, () => cb());
+    },
     onProgress: (cb: (percent: number) => void) => {
         ipcRenderer.on(UpdaterIpcEvents.DOWNLOAD_PROGRESS, (_, percent: number) => cb(percent));
     },
