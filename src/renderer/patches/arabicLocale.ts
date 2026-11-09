@@ -94,16 +94,46 @@ function translateMessageTable(input: unknown): MessageTable {
 
     const translated: MessageTable = {};
     for (const [key, value] of Object.entries(input)) {
-        translated[key] = translateValue(value);
+        const template = messageTemplate(value);
+        if (template !== null) seenMessages.set(key, template);
+
+        const next = translateValue(value);
+        if (next !== value) translatedMessages.add(key);
+        translated[key] = next;
     }
     return translated;
 }
 
+const seenMessages = new Map<string, string>();
+const translatedMessages = new Set<string>();
+
+function messageTemplate(value: unknown): string | null {
+    if (typeof value === "string") return value;
+    if (!Array.isArray(value)) return null;
+    return toTemplate(value)?.template ?? null;
+}
+
 const bridge = window as Window & {
     SaudiCordTranslateMessages?: (table: unknown) => MessageTable;
+    SaudiCordArabicCoverage?: () => {
+        liveKeys: number;
+        translated: number;
+        untranslated: Record<string, string>;
+    };
 };
 
 bridge.SaudiCordTranslateMessages = translateMessageTable;
+bridge.SaudiCordArabicCoverage = () => {
+    const untranslated: Record<string, string> = {};
+    for (const [key, template] of seenMessages) {
+        if (!translatedMessages.has(key)) untranslated[key] = template;
+    }
+    return {
+        liveKeys: seenMessages.size,
+        translated: translatedMessages.size,
+        untranslated
+    };
+};
 
 const messageLoaderPattern =
     /("en-US":\(\)=>([A-Za-z_$][\w$]*)\.e\("(\d+)"\)\.then\(\2\.bind\(\2,(\d+)\)\))\}/g;
