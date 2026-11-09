@@ -82,8 +82,21 @@ const errorText = document.getElementById("error");
 
 const updateButton = document.getElementById("update-button");
 
-// electron-updater doesn't support portable installs, so link to this fork's releases instead
-if (portable) updateButton.textContent = "تنزيل التحديث";
+// electron-updater does not support portable installs. Portable users get the GitHub release page.
+if (portable) {
+    updateButton.textContent = "تنزيل التحديث";
+} else {
+    updateButton.disabled = true;
+    updateButton.textContent = "جارٍ تنزيل التحديث تلقائياً...";
+    updateDialog.showModal();
+
+    VesktopUpdaterNative.onDownloaded(() => {
+        downloadProgress.value = 100;
+        updateDialog.close();
+        updateButton.disabled = false;
+        updateButton.textContent = "إعادة التشغيل وتثبيت التحديث";
+    });
+}
 
 updateButton.addEventListener("click", () => {
     if (portable) {
@@ -91,24 +104,12 @@ updateButton.addEventListener("click", () => {
         return;
     }
 
-    downloadProgress.value = 0;
     errorText.textContent = "";
-
-    if (navigator.platform.startsWith("Linux")) {
-        document.getElementById("linux-note").classList.remove("hidden");
-    }
-
-    updateDialog.showModal();
-
-    VesktopUpdaterNative.installUpdate().then(() => {
-        downloadProgress.value = 100;
-        updateDialog.closedBy = "any";
-
-        installingDialog.showModal();
-        updateDialog.classList.add("hidden");
-    }).catch(error => {
-        updateDialog.closedBy = "any";
-        errorText.textContent = `حدث خطأ أثناء تنزيل التحديث: ${String(error?.message ?? error)}`;
+    installingDialog.showModal();
+    VesktopUpdaterNative.installUpdate().catch(error => {
+        installingDialog.close();
+        errorText.textContent = `تعذر تثبيت التحديث: ${String(error?.message ?? error)}`;
+        updateDialog.showModal();
     });
 });
 
