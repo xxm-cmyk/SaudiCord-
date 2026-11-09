@@ -32,7 +32,8 @@
         "testTypes": "tsc --noEmit",
         "watch": "pnpm build --watch",
         "generateMeta": "tsx scripts/utils/generateMeta.mts",
-        "validate:arabic": "tsx scripts/utils/validateArabicTranslations.mts"
+        "validate:arabic": "tsx scripts/utils/validateArabicTranslations.mts",
+        "package:windows": "pnpm build && electron-builder --win --x64 --publish never"
     },
     "dependencies": {
         "electron-updater": "6.6.2"
@@ -74,7 +75,8 @@
             "dist/js",
             "static",
             "package.json",
-            "CREDITS.md"
+            "CREDITS.md",
+            "LICENSE"
         ],
         "protocols": {
             "name": "Discord",
