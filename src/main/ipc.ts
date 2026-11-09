@@ -174,7 +174,7 @@ handle(IpcEvents.FLASH_FRAME, (_, flag: boolean) => {
 });
 
 handle(IpcEvents.CLIPBOARD_COPY_IMAGE, async (_, buf: ArrayBuffer | Uint8Array, _src: string) => {
-    const byteLength = buf.byteLength;
+    const { byteLength } = buf;
     if (byteLength < 8 || byteLength > 20 * 1024 * 1024) {
         throw new TypeError("Invalid clipboard image size");
     }
