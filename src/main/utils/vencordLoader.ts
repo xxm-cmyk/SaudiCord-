@@ -20,7 +20,9 @@ export const FILES_TO_DOWNLOAD = [
     "vencordDesktopMain.js",
     "vencordDesktopPreload.js",
     "vencordDesktopRenderer.js",
-    "vencordDesktopRenderer.css"
+    "vencordDesktopRenderer.css",
+    "vencordDesktopMain.js.LEGAL.txt",
+    "vencordDesktopRenderer.js.LEGAL.txt"
 ];
 
 export interface ReleaseData {
