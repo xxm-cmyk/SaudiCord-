@@ -27,14 +27,14 @@ autoUpdater.on("update-available", update => {
     openUpdater(update);
 });
 
-autoUpdater.on("update-downloaded", () => setTimeout(() => autoUpdater.quitAndInstall(), 100));
+autoUpdater.on("update-downloaded", () => updaterWindow?.webContents.send(UpdaterIpcEvents.DOWNLOADED));
 autoUpdater.on("download-progress", p =>
     updaterWindow?.webContents.send(UpdaterIpcEvents.DOWNLOAD_PROGRESS, p.percent)
 );
 autoUpdater.on("error", err => updaterWindow?.webContents.send(UpdaterIpcEvents.ERROR, err.message));
 
-autoUpdater.autoDownload = false;
-autoUpdater.autoInstallOnAppQuit = false;
+autoUpdater.autoDownload = true;
+autoUpdater.autoInstallOnAppQuit = true;
 autoUpdater.fullChangelog = true;
 
 const isOutdated = autoUpdater.checkForUpdates().then(res => Boolean(res?.isUpdateAvailable));
@@ -73,7 +73,7 @@ function openUpdater(update: UpdateInfo) {
         portable: PORTABLE
     }));
     handleForWebContents(UpdaterIpcEvents.INSTALL, getUpdaterWebContents, async () => {
-        await autoUpdater.downloadUpdate();
+        autoUpdater.quitAndInstall();
     });
     handleForWebContents(UpdaterIpcEvents.SNOOZE_UPDATE, getUpdaterWebContents, () => {
         State.store.updater ??= {};
