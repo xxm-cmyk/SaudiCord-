@@ -109,7 +109,7 @@ updateButton.addEventListener("click", () => {
     VesktopUpdaterNative.installUpdate().catch(error => {
         installingDialog.close();
         errorText.textContent = `تعذر تثبيت التحديث: ${String(error?.message ?? error)}`;
-        updateDialog.showModal();
+        if (!updateDialog.open) updateDialog.showModal();
     });
 });
 
