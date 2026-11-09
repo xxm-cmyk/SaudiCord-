@@ -33,8 +33,8 @@ autoUpdater.on("download-progress", p =>
 );
 autoUpdater.on("error", err => updaterWindow?.webContents.send(UpdaterIpcEvents.ERROR, err.message));
 
-autoUpdater.autoDownload = true;
-autoUpdater.autoInstallOnAppQuit = true;
+autoUpdater.autoDownload = !PORTABLE;
+autoUpdater.autoInstallOnAppQuit = !PORTABLE;
 autoUpdater.fullChangelog = true;
 
 const isOutdated = autoUpdater.checkForUpdates().then(res => Boolean(res?.isUpdateAvailable));
