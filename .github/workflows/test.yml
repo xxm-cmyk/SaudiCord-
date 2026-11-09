@@ -63,7 +63,7 @@ jobs:
 
             - name: Add GPL license text to the packaged application
               shell: pwsh
-              run: Invoke-WebRequest -Uri https://www.gnu.org/licenses/gpl-3.0.txt -OutFile LICENSE
+              run: Invoke-WebRequest -Uri https://raw.githubusercontent.com/Vencord/Vesktop/857db4313fbcd79b0946538e68b262033c03f561/LICENSE -OutFile LICENSE -TimeoutSec 60
 
             - name: Package Windows installer and portable archive
               run: pnpm package:windows
