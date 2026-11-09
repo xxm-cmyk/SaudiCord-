@@ -7,7 +7,6 @@
 import { ARABIC_TRANSLATIONS } from "../arabicTranslations";
 import { addPatch } from "./shared";
 
-type MessagePart = string | readonly unknown[];
 type MessageTable = Record<string, unknown>;
 
 const RTL_START = "\u2067";
@@ -32,7 +31,6 @@ function toTemplate(parts: readonly unknown[]): { template: string; arguments: M
             template += part;
         } else if (isSimpleArgument(part)) {
             const name = part[1];
-            if (argumentsMap.has(name)) return null;
             argumentsMap.set(name, part);
             template += `{${name}}`;
         } else {
