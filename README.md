@@ -37,6 +37,10 @@ Every push to `main` runs the Windows build job. When validation and packaging s
 Open [GitHub Actions](https://github.com/xxm-cmyk/SaudiCord-/actions), select the latest successful `test` run, and download either artifact. The build includes the GPL-3.0 license text generated in the runner; no `LICENSE` file is committed to this repository.
 The installer is currently unsigned because no signing certificate is configured, so Windows SmartScreen may display an unknown-publisher warning.
 
+## Automatic updates
+
+Installed Windows builds check the GitHub Releases feed when SaudiCord starts. If a newer release is available, the installer build downloads it automatically and applies it when SaudiCord exits; the app asks to restart once the download is ready. Portable builds cannot be silently replaced, so they open the matching GitHub release page for a manual download. Releases are published by pushing a version tag matching the package version (for example, `v0.1.0`); the release workflow generates the `latest.yml` metadata and installer assets required by `electron-updater`. Update packages are currently unsigned, so Windows may show a SmartScreen warning.
+
 ## How Discord integration works
 
 SaudiCord is a standalone Electron client that opens Discord's web application and loads Vencord inside its own process. It does not patch or overwrite the separately installed official Discord client. Vencord desktop assets are downloaded into SaudiCord's dedicated application-data directory and SHA-256 verified before they are loaded.
