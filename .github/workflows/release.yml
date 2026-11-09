@@ -15,21 +15,16 @@ jobs:
 
         steps:
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
             - name: Add GPL license text to the packaged application
               shell: pwsh
               run: Invoke-WebRequest -Uri https://raw.githubusercontent.com/Vencord/Vesktop/857db4313fbcd79b0946538e68b262033c03f561/LICENSE -OutFile LICENSE -TimeoutSec 60
 
             - name: Verify release prerequisites
               shell: pwsh
-              env:
-                  WINDOWS_SIGNING_CERT: ${{ secrets.WINDOWS_SIGNING_CERT }}
-                  WINDOWS_SIGNING_CERT_PASSWORD: ${{ secrets.WINDOWS_SIGNING_CERT_PASSWORD }}
               run: |
                   if (!(Test-Path LICENSE)) {
                       throw "Release blocked: the required GPL license text is not present."
-                  }
-                  if ([string]::IsNullOrWhiteSpace($env:WINDOWS_SIGNING_CERT) -or [string]::IsNullOrWhiteSpace($env:WINDOWS_SIGNING_CERT_PASSWORD)) {
-                      throw "Release blocked: Windows code-signing certificate secrets are not configured."
                   }
 
             - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
@@ -53,5 +48,11 @@ jobs:
               run: pnpm electron-builder --windows --publish always
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  CSC_LINK: ${{ secrets.WINDOWS_SIGNING_CERT }}
-                  CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_SIGNING_CERT_PASSWORD }}
+                  CSC_IDENTITY_AUTO_DISCOVERY: "false"
+
+            - name: Verify auto-update metadata
+              shell: pwsh
+              run: |
+                  if (!(Test-Path dist/latest.yml)) {
+                      throw "Release blocked: electron-updater metadata (latest.yml) was not generated."
+                  }
