@@ -85,14 +85,14 @@ const updateButton = document.getElementById("update-button");
 // electron-updater does not support portable installs. Portable users get the GitHub release page.
 if (portable) {
     updateButton.textContent = "تنزيل التحديث";
+    document.getElementById("download-status").classList.add("hidden");
+    downloadProgress.classList.add("hidden");
 } else {
     updateButton.disabled = true;
     updateButton.textContent = "جارٍ تنزيل التحديث تلقائياً...";
-    updateDialog.showModal();
-
     VesktopUpdaterNative.onDownloaded(() => {
         downloadProgress.value = 100;
-        updateDialog.close();
+        document.getElementById("download-status").textContent = "اكتمل تنزيل التحديث. أعد تشغيل سعودي كورد لتثبيته.";
         updateButton.disabled = false;
         updateButton.textContent = "إعادة التشغيل وتثبيت التحديث";
     });
@@ -121,10 +121,14 @@ document.getElementById("ignore-button").addEventListener("click", () => {
     if (confirmed) VesktopUpdaterNative.ignoreUpdate();
 });
 
-VesktopUpdaterNative.onProgress(percent => (downloadProgress.value = percent));
+VesktopUpdaterNative.onProgress(percent => {
+    downloadProgress.value = percent;
+    document.getElementById("download-status").textContent = `جارٍ تنزيل التحديث تلقائياً... ${Math.round(percent)}%`;
+});
 VesktopUpdaterNative.onError(message => {
     updateDialog.closedBy = "any";
     errorText.textContent = `حدث خطأ أثناء تنزيل التحديث: ${message}`;
     installingDialog.close();
     updateDialog.classList.remove("hidden");
+    if (!updateDialog.open) updateDialog.showModal();
 });
