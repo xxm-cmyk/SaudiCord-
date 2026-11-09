@@ -18,21 +18,23 @@ export const DeveloperOptionsButton: SettingsComponent = ({ settings }) => {
 function openDeveloperOptionsModal(settings: Settings) {
     openModal(props => (
         <Modal {...props} size="lg" title="خيارات مطور سعودي كورد">
-            <Heading tag="h4">موقع ملفات Vencord</Heading>
-            <Paragraph>
-                تنبيه: ملفات Vencord عبارة عن شيفرة يتم تشغيلها داخل التطبيق. لا تختَر مجلداً مخصصاً إلا إذا كنت تثق
-                بمصدر جميع ملفاته.
-            </Paragraph>
-            <VencordLocationPicker settings={settings} />
+            <div lang="ar" dir="rtl">
+                <Heading tag="h4">موقع ملفات Vencord</Heading>
+                <Paragraph>
+                    تنبيه: ملفات Vencord عبارة عن شيفرة يتم تشغيلها داخل التطبيق. لا تختَر مجلداً مخصصاً إلا إذا كنت تثق
+                    بمصدر جميع ملفاته.
+                </Paragraph>
+                <VencordLocationPicker settings={settings} />
 
-            <Heading tag="h4" className={Margins.top16}>
-                استكشاف الأخطاء
-            </Heading>
-            <div className={cl("button-grid")}>
-                <Button onClick={() => VesktopNative.debug.launchGpu()}>فتح معلومات بطاقة الرسوميات</Button>
-                <Button onClick={() => VesktopNative.debug.launchWebrtcInternals()}>
-                    فتح معلومات WebRTC
-                </Button>
+                <Heading tag="h4" className={Margins.top16}>
+                    استكشاف الأخطاء
+                </Heading>
+                <div className={cl("button-grid")}>
+                    <Button onClick={() => VesktopNative.debug.launchGpu()}>فتح معلومات بطاقة الرسوميات</Button>
+                    <Button onClick={() => VesktopNative.debug.launchWebrtcInternals()}>
+                        فتح معلومات WebRTC
+                    </Button>
+                </div>
             </div>
         </Modal>
     ));
