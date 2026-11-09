@@ -92,8 +92,7 @@ export async function downloadVencordFiles() {
             ) {
                 previousManagedFiles = Object.keys(previousManifest.files).filter(
                     name =>
-                        /^[A-Za-z0-9._-]+$/.test(name) &&
-                        !name.startsWith(".") &&
+                        /^vencordDesktop[A-Za-z0-9._-]+$/.test(name) &&
                         !FILES_TO_DOWNLOAD.includes(name)
                 );
             }
@@ -179,7 +178,13 @@ export async function isValidVencordInstall(dir: string) {
 
     try {
         const manifest = JSON.parse(await readFile(join(dir, ".saudicord-integrity.json"), "utf-8"));
-        if (manifest.source !== "github.com/Vendicated/Vencord" || typeof manifest.tag_name !== "string") return false;
+        if (
+            manifest.managedBy !== "SaudiCord" ||
+            manifest.source !== "github.com/Vendicated/Vencord" ||
+            typeof manifest.tag_name !== "string"
+        ) {
+            return false;
+        }
 
         const checks = await Promise.all(
             FILES_TO_DOWNLOAD.map(async name => {
