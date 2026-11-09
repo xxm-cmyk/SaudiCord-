@@ -74,6 +74,31 @@ export async function downloadVencordFiles() {
     mkdirSync(VENCORD_FILES_DIR, { recursive: true });
 
     // Download into temporary files, then verify every digest before replacing the active install.
+    // Cleanup is restricted to files recorded by a previous SaudiCord-managed manifest
+    // inside the default app-data directory. Custom directories are never pruned.
+    let previousManagedFiles: string[] = [];
+    if (VENCORD_FILES_DIR === DEFAULT_VENCORD_FILES_DIR) {
+        try {
+            const previousManifest = JSON.parse(
+                await readFile(join(VENCORD_FILES_DIR, ".saudicord-integrity.json"), "utf-8")
+            );
+            if (
+                previousManifest.managedBy === "SaudiCord" &&
+                previousManifest.source === "github.com/Vendicated/Vencord" &&
+                previousManifest.files &&
+                typeof previousManifest.files === "object"
+            ) {
+                previousManagedFiles = Object.keys(previousManifest.files).filter(
+                    name =>
+                        /^[A-Za-z0-9._-]+$/.test(name) &&
+                        !name.startsWith(".") &&
+                        !FILES_TO_DOWNLOAD.includes(name)
+                );
+            }
+        } catch {
+            // Missing or unreadable manifests are not trusted for cleanup.
+        }
+    }
     const temporaryFiles = files.map(({ name }) => join(VENCORD_FILES_DIR, name + ".tmp"));
 
     try {
@@ -114,12 +139,21 @@ export async function downloadVencordFiles() {
             join(VENCORD_FILES_DIR, ".saudicord-integrity.json"),
             JSON.stringify(
                 {
+                    managedBy: "SaudiCord",
                     source: "github.com/Vendicated/Vencord",
                     tag_name: releaseData.tag_name,
                     files: verifiedDigests
                 },
                 null,
                 4
+            )
+        );
+
+        await Promise.all(
+            previousManagedFiles.map(name =>
+                rm(join(VENCORD_FILES_DIR, name), { force: true }).catch(error => {
+                    console.warn("Failed to remove stale SaudiCord-managed Vencord file " + name + ":", error);
+                })
             )
         );
     } catch (error) {
