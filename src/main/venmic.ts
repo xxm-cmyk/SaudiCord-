@@ -6,7 +6,7 @@
 
 import { join } from "path";
 
-import type { LinkData, Node, PatchBay as PatchBayType } from "@vencord/venmic";
+import type { LinkData, Node, PatchBayConstructor, PatchBayInstance } from "shared/venmic";
 import { app } from "electron";
 import { IpcEvents } from "shared/IpcEvents";
 import { STATIC_DIR } from "shared/paths";
@@ -15,8 +15,8 @@ import { Settings } from "./settings";
 import { isScreenShareAudioActive, isScreenShareRequestActive, setScreenShareAudioActive } from "./screenShareState";
 import { handle } from "./utils/ipcWrappers";
 
-let PatchBay: typeof PatchBayType | undefined;
-let patchBayInstance: PatchBayType | undefined;
+let PatchBay: PatchBayConstructor | undefined;
+let patchBayInstance: PatchBayInstance | undefined;
 
 let imported = false;
 let initialized = false;
@@ -32,7 +32,7 @@ function importVenmic() {
     imported = true;
 
     try {
-        PatchBay = (require(join(STATIC_DIR, `dist/venmic-${process.arch}.node`)) as typeof import("@vencord/venmic"))
+        PatchBay = (require(join(STATIC_DIR, `dist/venmic-${process.arch}.node`)) as { PatchBay: PatchBayConstructor })
             .PatchBay;
 
         hasPipewirePulse = PatchBay.hasPipeWire();
