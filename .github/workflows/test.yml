@@ -28,6 +28,9 @@ jobs:
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
 
+            - name: Format source before validation
+              run: pnpm fmt
+
             - name: Run tests
               run: pnpm test
 
@@ -52,8 +55,29 @@ jobs:
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
 
+            - name: Format source before validation
+              run: pnpm fmt
+
             - name: Run tests
               run: pnpm test
 
-            - name: Build Windows app
-              run: pnpm build
+            - name: Add GPL license text to the packaged application
+              shell: pwsh
+              run: Invoke-WebRequest -Uri https://www.gnu.org/licenses/gpl-3.0.txt -OutFile LICENSE
+
+            - name: Package Windows installer and portable archive
+              run: pnpm package:windows
+              env:
+                  CSC_IDENTITY_AUTO_DISCOVERY: "false"
+
+            - name: Upload Windows build artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                  name: SaudiCord-Windows-x64
+                  path: |
+                      dist/*.exe
+                      dist/*.zip
+                      dist/*.yml
+                      dist/*.blockmap
+                  if-no-files-found: error
+                  retention-days: 14
