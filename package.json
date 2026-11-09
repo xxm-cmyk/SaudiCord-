@@ -28,10 +28,11 @@
         "start": "pnpm build && electron --enable-source-maps .",
         "start:dev": "pnpm build:dev && electron --enable-source-maps .",
         "start:watch": "pnpm build:dev && tsx scripts/startWatch.mts",
-        "test": "pnpm lint && pnpm fmt:check && pnpm testTypes",
+        "test": "pnpm lint && pnpm fmt:check && pnpm testTypes && pnpm validate:arabic",
         "testTypes": "tsc --noEmit",
         "watch": "pnpm build --watch",
-        "generateMeta": "tsx scripts/utils/generateMeta.mts"
+        "generateMeta": "tsx scripts/utils/generateMeta.mts",
+        "validate:arabic": "tsx scripts/utils/validateArabicTranslations.mts"
     },
     "dependencies": {
         "electron-updater": "6.6.2"
