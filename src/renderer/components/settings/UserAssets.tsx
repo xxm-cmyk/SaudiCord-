@@ -28,7 +28,7 @@ export const UserAssetsButton: SettingsComponent = () => {
 function openAssetsModal() {
     openModal(props => (
         <Modal {...props} size="lg" title="ملفات المظهر">
-            <div className="vcd-user-assets">
+            <div className="vcd-user-assets" lang="ar" dir="rtl">
                 {CUSTOMIZABLE_ASSETS.map(asset => (
                     <Asset key={asset} asset={asset} />
                 ))}
