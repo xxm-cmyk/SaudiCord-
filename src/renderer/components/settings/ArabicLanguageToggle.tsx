@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { Button, FormSwitch, Text } from "@vencord/types/components";
+import { Button, FormSwitch } from "@vencord/types/components";
 import { showToast, UserSettingsActionCreators } from "@vencord/types/webpack/common";
 import { useState } from "react";
 
@@ -111,9 +111,9 @@ export const ArabicLanguageToggle: SettingsComponent = () => {
                         نسخ النصوص غير المعرّبة ({missing.toLocaleString()})
                     </Button>
                 </div>
-                <Text size="sm" color="text-muted">
+                <div style={{ opacity: 0.65, fontSize: 12 }}>
                     الإحصائية تتحدث مع فتح الأقسام داخل Discord؛ النصوص التي لم تُحمّل بعد لا تدخل في الحساب.
-                </Text>
+                </div>
             </div>
         </div>
     );
