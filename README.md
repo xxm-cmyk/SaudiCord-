@@ -35,6 +35,7 @@ Every push to `main` runs the Windows build job. When validation and packaging s
 - A portable Windows x64 archive (`.zip`) in `SaudiCord-Windows-Portable`.
 
 Open [GitHub Actions](https://github.com/xxm-cmyk/SaudiCord-/actions), select the latest successful `test` run, and download either artifact. The build includes the GPL-3.0 license text generated in the runner; no `LICENSE` file is committed to this repository.
+The installer is currently unsigned because no signing certificate is configured, so Windows SmartScreen may display an unknown-publisher warning.
 
 ## How Discord integration works
 
