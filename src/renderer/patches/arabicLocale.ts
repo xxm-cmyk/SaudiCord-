@@ -113,6 +113,8 @@ addPatch({
         {
             // Discord's Arabic locale is present but disabled in its locale catalog.
             find: '"englishName":"Arabic"',
+            all: true,
+            noWarn: true,
             replacement: {
                 match: /("code":"ar"(?:,"[A-Za-z]+":"[^"]*")*,"enabled":)false/g,
                 replace: "$1true"
