@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { Button, FormSwitch } from "@vencord/types/components";
+import { Button, FormSwitch, Text } from "@vencord/types/components";
 import { showToast, UserSettingsActionCreators } from "@vencord/types/webpack/common";
 import { useState } from "react";
 
