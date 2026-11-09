@@ -5,8 +5,7 @@
  */
 
 import { Button, FormSwitch, Text } from "@vencord/types/components";
-import { showToast, UserSettingsActionCreators } from "@vencord/types/webpack/common";
-import { useState } from "@vencord/types/webpack/common";
+import { showToast, UserSettingsActionCreators, useState } from "@vencord/types/webpack/common";
 
 import { SettingsComponent } from "./Settings";
 
