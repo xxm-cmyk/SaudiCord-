@@ -28,6 +28,20 @@ SaudiCord is based on **Vesktop**, developed by the Vencord contributors.
 
 Upstream copyright notices remain in the source files. The derived Vesktop code is marked GPL-3.0-or-later. This development repository currently does not bundle a `LICENSE` file; do not distribute source archives or application binaries until the required license text and all applicable notices are included. See [CREDITS.md](./CREDITS.md). Third-party dependencies and assets may have their own licenses.
 
+## Windows builds from GitHub Actions
+
+Every push to `main` runs the Windows build job. When validation and packaging succeed, the job uploads:
+- A Windows x64 NSIS installer (`.exe`).
+- A portable Windows x64 archive (`.zip`).
+
+Open [GitHub Actions](https://github.com/xxm-cmyk/SaudiCord-/actions), select the latest successful `test` run, and download the `SaudiCord-Windows-x64` artifact. The build includes the GPL-3.0 license text generated in the runner; no `LICENSE` file is committed to this repository.
+
+## How Discord integration works
+
+SaudiCord is a standalone Electron client that opens Discord's web application and loads Vencord inside its own process. It does not patch or overwrite the separately installed official Discord client. Vencord desktop assets are downloaded into SaudiCord's dedicated application-data directory and SHA-256 verified before they are loaded.
+
+When updating those assets, SaudiCord only removes stale files named in a previous SaudiCord-managed integrity manifest inside its own default data directory. It does not delete BetterDiscord, Equicord, or other third-party modifications from an official Discord installation or from user-selected custom directories.
+
 ## Building from source
 
 ### Requirements
