@@ -35,6 +35,15 @@ function getCurrentLocale(): string {
     }
 }
 
+function updateDocumentDirection(locale: string): void {
+    const isArabic = locale.toLowerCase().startsWith("ar");
+    if (typeof document === "undefined") return;
+
+    document.documentElement.lang = isArabic ? "ar" : locale;
+    document.documentElement.dir = isArabic ? "rtl" : "ltr";
+    document.body?.setAttribute("dir", isArabic ? "rtl" : "ltr");
+}
+
 async function updateLocale(locale: string): Promise<void> {
     await UserSettingsActionCreators.PreloadedUserSettingsActionCreators.updateAsync(
         "localization",
@@ -63,7 +72,9 @@ export const ArabicLanguageToggle: SettingsComponent = () => {
                 onChange={async value => {
                     setPending(true);
                     try {
-                        await updateLocale(value ? "ar" : "en-US");
+                        const nextLocale = value ? "ar" : "en-US";
+                        await updateLocale(nextLocale);
+                        updateDocumentDirection(nextLocale);
                         setEnabled(value);
                         showToast({
                             text: value ? "تم تفعيل العربية في Discord." : "تمت إعادة Discord إلى الإنجليزية.",
