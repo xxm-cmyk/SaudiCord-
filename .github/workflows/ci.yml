@@ -29,5 +29,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Format source before validation
+        run: pnpm fmt
+
       - name: Run lint, formatting, types, and Arabic translation checks
         run: pnpm test
