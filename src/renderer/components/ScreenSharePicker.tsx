@@ -28,7 +28,7 @@ import {
     UserStore,
     useState
 } from "@vencord/types/webpack/common";
-import { Node } from "@vencord/venmic";
+import type { Node } from "shared/venmic";
 import type { Dispatch, SetStateAction } from "react";
 import { State, useSettings, useVesktopState } from "renderer/settings";
 import { isLinux, isWindows } from "renderer/utils";
