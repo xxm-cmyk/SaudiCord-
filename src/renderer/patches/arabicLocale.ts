@@ -90,7 +90,7 @@ function translateValue(value: unknown): unknown {
  * ICU structures remain untouched rather than risking broken formatting.
  */
 function translateMessageTable(input: unknown): MessageTable {
-    if (input === null || typeof input !== "object") return {};
+    if (input === null || typeof input !== "object") return input as MessageTable;
 
     const translated: MessageTable = {};
     for (const [key, value] of Object.entries(input)) {
