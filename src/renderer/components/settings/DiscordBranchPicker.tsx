@@ -16,8 +16,8 @@ export const DiscordBranchPicker: SettingsComponent = ({ settings }) => {
                 placeholder="مستقر"
                 options={[
                     { label: "مستقر", value: "stable", default: true },
-                    { label: "Canary", value: "canary" },
-                    { label: "PTB", value: "ptb" }
+                    { label: "Canary (تجريبية مبكرة)", value: "canary" },
+                    { label: "نسخة الاختبار العامة (PTB)", value: "ptb" }
                 ]}
                 closeOnSelect={true}
                 select={v => (settings.discordBranch = v)}
