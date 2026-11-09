@@ -1,6 +1,6 @@
 /*
  * Vesktop, a desktop app aiming to give you a snappier Discord Experience
- * Copyright (c) 2025 Vendicated and Vesktop contributors
+ * Copyright (c) 2025 Vendicated and Vencord contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
@@ -22,50 +22,50 @@ const options = {
         default: false,
         type: "boolean",
         short: "m",
-        description: "Start the application minimized to the system tray"
+        description: "تشغيل التطبيق في وضع مصغّر إلى شريط النظام"
     },
     version: {
         type: "boolean",
         short: "v",
-        description: "Print the application version and exit"
+        description: "عرض إصدار التطبيق ثم الخروج"
     },
     help: {
         type: "boolean",
         short: "h",
-        description: "Print help information and exit"
+        description: "عرض المساعدة ثم الخروج"
     },
     "user-agent": {
         type: "string",
         argumentName: "ua",
-        description: "Set a custom User-Agent. May trigger anti-spam or break voice chat"
+        description: "تعيين User-Agent مخصص. قد يؤدي إلى تفعيل أنظمة مكافحة الإزعاج أو تعطيل المحادثة الصوتية"
     },
     "user-agent-os": {
         type: "string",
-        description: "Set User-Agent to a specific operating system. May trigger anti-spam or break voice chat",
+        description: "تعيين نظام تشغيل محدد في User-Agent",
         options: ["windows", "linux", "darwin"]
     },
     repair: {
         type: "boolean",
-        description: "Repair the application by re-downloading the latest Vencord files"
+        description: "إصلاح التطبيق عبر إعادة تنزيل أحدث ملفات Vencord"
     }
 } satisfies Record<string, Option>;
 
-// only for help display
+// خيارات إضافية تظهر في شاشة المساعدة فقط
 const extraOptions = {
     "enable-features": {
         type: "string",
-        description: "Enable specific Chromium features",
+        description: "تفعيل ميزات Chromium محددة",
         argumentName: "feature1,feature2,…"
     },
     "disable-features": {
         type: "string",
-        description: "Disable specific Chromium features",
+        description: "تعطيل ميزات Chromium محددة",
         argumentName: "feature1,feature2,…"
     },
     "ozone-platform": {
         hidden: process.platform !== "linux",
         type: "string",
-        description: "Whether to run SaudiCord in Wayland or X11 (XWayland)",
+        description: "اختيار تشغيل سعودي كورد عبر Wayland أو X11 (XWayland)",
         options: ["x11", "wayland"]
     }
 } satisfies Record<string, Option>;
@@ -91,17 +91,17 @@ export function checkCommandLineForHelpOrVersion() {
 
     if (help) {
         const base = stripIndent`
-            SaudiCord v${app.getVersion()}
+            سعودي كورد v${app.getVersion()}
 
-            Usage: ${basename(process.execPath)} [options] [url]
+            طريقة الاستخدام: ${basename(process.execPath)} [options] [url]
 
-            Electron Options:
-              See <https://www.electronjs.org/docs/latest/api/command-line-switches#electron-cli-flags>
+            خيارات Electron:
+              راجع <https://www.electronjs.org/docs/latest/api/command-line-switches#electron-cli-flags>
 
-            Chromium Options:
-              See <https://peter.sh/experiments/chromium-command-line-switches> - only some of them work
+            خيارات Chromium:
+              راجع <https://peter.sh/experiments/chromium-command-line-switches> — بعض الخيارات فقط تعمل
 
-            SaudiCord Options:
+            خيارات سعودي كورد:
         `;
 
         const optionLines = Object.entries(options)
@@ -136,12 +136,12 @@ export function checkCommandLineForHelpOrVersion() {
         if (value == null) continue;
 
         if (typeof value !== def.type) {
-            console.error(`Invalid options. Expected ${def.type === "boolean" ? "no" : "an"} argument for --${name}`);
+            console.error(`خيارات غير صالحة. ${def.type === "boolean" ? "لا يجب إضافة قيمة" : "يجب إضافة قيمة"} للخيار --${name}`);
             app.exit(1);
         }
 
         if ("options" in def && !def.options?.includes(value as string)) {
-            console.error(`Invalid value for --${name}: ${value}\nExpected one of: ${def.options.join(", ")}`);
+            console.error(`قيمة غير صالحة للخيار --${name}: ${value}\nالقيم المتاحة: ${def.options.join(", ")}`);
             app.exit(1);
         }
     }
