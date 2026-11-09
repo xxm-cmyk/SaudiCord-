@@ -12,6 +12,7 @@ import { WebRTCIPHandlingPolicyPicker } from "renderer/components/settings/WebRT
 import { getValueAndOnChange, Settings, useSettings } from "renderer/settings";
 import { isMac } from "renderer/utils";
 
+import { ArabicLanguageToggle } from "./ArabicLanguageToggle";
 import { AutoStartToggle } from "./AutoStartToggle";
 import { DeveloperOptionsButton } from "./DeveloperOptions";
 import { DiscordBranchPicker } from "./DiscordBranchPicker";
@@ -34,6 +35,7 @@ export const cl = classNameFactory("vcd-settings-");
 export type SettingsComponent = ComponentType<{ settings: typeof Settings.store }>;
 
 const SettingsOptions: Record<string, Array<BooleanSetting | SettingsComponent>> = {
+    "اللغة والتعريب": [ArabicLanguageToggle],
     "فرع Discord": [DiscordBranchPicker],
     "بدء التشغيل والأداء": [
         AutoStartToggle,
