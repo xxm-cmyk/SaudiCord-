@@ -34,7 +34,7 @@ function toTemplate(parts: readonly unknown[]): { template: string; arguments: M
             argumentsMap.set(name, part);
             template += `{${name}}`;
         } else {
-            // Leave plural/select branches and rich Discord components untouched.
+            // Complex branches are traversed recursively by translateValue.
             return null;
         }
     }
@@ -69,7 +69,7 @@ function fromTemplate(
 }
 
 function containsArabic(value: unknown): boolean {
-    if (typeof value === "string") return /[\\u0600-\\u06FF]/.test(value);
+    if (typeof value === "string") return /[\u0600-\u06FF]/.test(value);
     if (Array.isArray(value)) return value.some(containsArabic);
     if (value && typeof value === "object") return Object.values(value).some(containsArabic);
     return false;
@@ -131,8 +131,8 @@ function translateValue(value: unknown): unknown {
 }
 
 /**
- * Convert only exact, reviewed message matches. Unknown messages and complex
- * ICU structures remain untouched rather than risking broken formatting.
+ * Convert exact reviewed templates and recurse through nested ICU/rich-text
+ * nodes. Unknown strings and unsupported argument structures remain unchanged.
  */
 function translateMessageTable(input: unknown): MessageTable {
     if (input === null || typeof input !== "object") return input as MessageTable;
