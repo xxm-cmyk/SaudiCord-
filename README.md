@@ -31,10 +31,10 @@ Upstream copyright notices remain in the source files. The derived Vesktop code 
 ## Windows builds from GitHub Actions
 
 Every push to `main` runs the Windows build job. When validation and packaging succeed, the job uploads:
-- A Windows x64 NSIS installer (`.exe`).
-- A portable Windows x64 archive (`.zip`).
+- A Windows x64 NSIS installer (`.exe`) in `SaudiCord-Windows-Installer`.
+- A portable Windows x64 archive (`.zip`) in `SaudiCord-Windows-Portable`.
 
-Open [GitHub Actions](https://github.com/xxm-cmyk/SaudiCord-/actions), select the latest successful `test` run, and download the `SaudiCord-Windows-x64` artifact. The build includes the GPL-3.0 license text generated in the runner; no `LICENSE` file is committed to this repository.
+Open [GitHub Actions](https://github.com/xxm-cmyk/SaudiCord-/actions), select the latest successful `test` run, and download either artifact. The build includes the GPL-3.0 license text generated in the runner; no `LICENSE` file is committed to this repository.
 
 ## How Discord integration works
 
