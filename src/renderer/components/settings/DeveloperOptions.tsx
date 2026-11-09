@@ -45,7 +45,7 @@ const VencordLocationPicker: SettingsComponent = () => {
     return (
         <>
             <Paragraph>
-                Vencord files are loaded from{" "}
+                تُحمّل ملفات Vencord من{" "}
                 {usingCustomVencordDir ? (
                     <TextButton
                         variant="link"
