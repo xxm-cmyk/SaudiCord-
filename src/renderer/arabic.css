@@ -1,0 +1,25 @@
+/*
+ * SaudiCord global Arabic layout.
+ * Keep code editors and code blocks left-to-right.
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+html[dir="rtl"] body,
+html[dir="rtl"] #app-mount {
+    direction: rtl;
+}
+
+html[dir="rtl"] #app-mount input:not([type="checkbox"]):not([type="radio"]),
+html[dir="rtl"] #app-mount textarea,
+html[dir="rtl"] #app-mount [contenteditable="true"] {
+    direction: rtl;
+    text-align: right;
+}
+
+html[dir="rtl"] #app-mount pre,
+html[dir="rtl"] #app-mount code,
+html[dir="rtl"] #app-mount .hljs {
+    direction: ltr;
+    text-align: left;
+    unicode-bidi: plaintext;
+}
