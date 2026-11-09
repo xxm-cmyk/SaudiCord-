@@ -15,6 +15,10 @@ jobs:
 
         steps:
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+            - name: Add GPL license text to the packaged application
+              shell: pwsh
+              run: Invoke-WebRequest -Uri https://raw.githubusercontent.com/Vencord/Vesktop/857db4313fbcd79b0946538e68b262033c03f561/LICENSE -OutFile LICENSE -TimeoutSec 60
+
             - name: Verify release prerequisites
               shell: pwsh
               env:
