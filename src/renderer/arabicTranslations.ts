@@ -216,5 +216,4 @@ export const ARABIC_TRANSLATIONS: Readonly<Record<string, string>> = {
     "Create Role": "إنشاء دور",
     "Edit Role": "تعديل الدور",
     "Delete Role": "حذف الدور",
-    "Save Changes": "حفظ التغييرات"
 };
